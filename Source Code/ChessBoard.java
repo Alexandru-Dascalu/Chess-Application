@@ -396,7 +396,11 @@ public class ChessBoard
 		//see if the square directly above the king is in check
 		if(king.getRow()!=SIZE_OF_BOARD-1)
 		{
-			if(isInCheck(player, king.getRow()+1, king.getColumn()))
+			if(chessBoard[king.getRow()+1][king.getColumn()]!=null)
+			{
+				possibleSquares--;
+			}
+			else if(isInCheck(player, king.getRow()+1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
@@ -409,7 +413,11 @@ public class ChessBoard
 		//see if the square directly below the king is in check
 		if(king.getRow()!=0)
 		{
-			if(isInCheck(player, king.getRow()-1, king.getColumn()))
+			if(chessBoard[king.getRow()-1][king.getColumn()]!=null)
+			{
+				possibleSquares--;
+			}
+			else if(isInCheck(player, king.getRow()-1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
@@ -422,7 +430,11 @@ public class ChessBoard
 		//see if the square directly to the left of the king is in check
 		if(king.getColumn()!=0)
 		{
-			if(isInCheck(player, king.getRow(), king.getColumn()-1))
+			if(chessBoard[king.getRow()][king.getColumn()-1]!=null)
+			{
+				possibleSquares--;
+			}
+			else if(isInCheck(player, king.getRow(), king.getColumn()-1))
 			{
 				checkedSquares++;
 			}
@@ -435,7 +447,11 @@ public class ChessBoard
 		//see if the square directly to the right of the the king is in check
 		if(king.getColumn()!=SIZE_OF_BOARD-1)
 		{
-			if(isInCheck(player, king.getRow(), king.getColumn()+1))
+			if(chessBoard[king.getRow()][king.getColumn()+1]!=null)
+			{
+				possibleSquares--;
+			}
+			else if(isInCheck(player, king.getRow(), king.getColumn()+1))
 			{
 				checkedSquares++;
 			}
@@ -448,7 +464,11 @@ public class ChessBoard
 		//see if the square directly to the bottom left of the king is in check
 		if(king.getColumn()!=0 && king.getRow()!=0)
 		{
-			if(isInCheck(player,king.getRow()-1,king.getColumn()-1))
+			if(chessBoard[king.getRow()-1][king.getColumn()-1]!=null)
+			{
+				possibleSquares--;
+			}
+			else if(isInCheck(player,king.getRow()-1,king.getColumn()-1))
 			{
 				checkedSquares++;
 			}
@@ -461,7 +481,11 @@ public class ChessBoard
 		//see if the square directly to the top left of the king is in check
 		if(king.getColumn()!=0 && king.getRow()!=SIZE_OF_BOARD-1)
 		{
-			if(isInCheck(player,king.getRow()+1, king.getColumn()-1))
+			if(chessBoard[king.getRow()+1][king.getColumn()-1]!=null)
+			{
+				possibleSquares--;
+			}
+			else if(isInCheck(player,king.getRow()+1, king.getColumn()-1))
 			{
 				checkedSquares++;
 			}
@@ -474,7 +498,11 @@ public class ChessBoard
 		//see if the square directly to the top right of the king is in check
 		if(king.getColumn()!=SIZE_OF_BOARD-1 && king.getRow()!=SIZE_OF_BOARD-1)
 		{
-			if(isInCheck(player,king.getRow()+1,king.getColumn()+1))
+			if(chessBoard[king.getRow()+1][king.getColumn()+1]!=null)
+			{
+				possibleSquares--;
+			}
+			else if(isInCheck(player,king.getRow()+1,king.getColumn()+1))
 			{
 				checkedSquares++;
 			}
@@ -487,7 +515,11 @@ public class ChessBoard
 		//see if the square directly to the bottom right of the king is in check
 		if(king.getColumn()!=SIZE_OF_BOARD-1 && king.getRow()!=0)
 		{
-			if(isInCheck(player,king.getRow()-1,king.getColumn()+1))
+			if(chessBoard[king.getRow()-1][king.getColumn()+1]!=null)
+			{
+				possibleSquares--;
+			}
+			else if(isInCheck(player,king.getRow()-1,king.getColumn()+1))
 			{
 				checkedSquares++;
 			}
