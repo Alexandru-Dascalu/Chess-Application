@@ -376,9 +376,10 @@ public class ChessBoard
 		//that are in check
 		int checkedSquares=0;
 		
-		//the maximum number of squares the king can move to, plus his current one
-		//can vary if the king is on the edge of the chess board
-		int possibleSquares=9;
+		/*variable for the number of squares that the king could move to,
+		 * meaning squares that are not occupied by pieces of the same team.
+		 * Initialised as 1 for the square the king is currently on.*/
+		int possibleSquares=1;
 		
 		//see if the square the king is on is in check
 		if(isInCheck(player, king.getRow(), king.getColumn()))
@@ -386,147 +387,101 @@ public class ChessBoard
 			checkedSquares++;
 		}
 
-		/*There are 8 squares the king can move to. For each we have an if statement 
-		 * which first checks to see that square exists.If it does, we check if that 
-		 * square is occupied.If it is, we decrement possibleSquares. If its not we see if that 
-		 * square is in check, and if it is, we increment checkedSquares. If the square 
-		 * does not exist, because the king is on an edge of the board, we decrement 
-		 * possibleSquares.*/
+		/*There are 8 squares the king can move to. For each, we use the validMove method
+		 * to see if the king could move there. If the square we are checking does not 
+		 * exist and is off the edges of the board, this method will return false. It will
+		 * also return false if the square is populated by a piece of the same colour.
+		 * If it returns true, we increment possibleSquares. Then, we check if that 
+		 * square is in check, and if it is, we increment checkedSquares.*/
 		
 		//see if the square directly above the king is in check
-		if(king.getRow()!=SIZE_OF_BOARD-1)
+		if(king.validMove(king.getRow()+1,king.getColumn(), chessBoard))
 		{
-			if(chessBoard[king.getRow()+1][king.getColumn()]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player, king.getRow()+1, king.getColumn()))
+			possibleSquares++;
+			if(isInCheck(player, king.getRow()+1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
-		}
-		else
-		{
-			possibleSquares--;
 		}
 		
 		//see if the square directly below the king is in check
-		if(king.getRow()!=0)
+		if(king.validMove(king.getRow()-1,king.getColumn(), chessBoard))
 		{
-			if(chessBoard[king.getRow()-1][king.getColumn()]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player, king.getRow()-1, king.getColumn()))
+			possibleSquares++;
+			if(isInCheck(player, king.getRow()-1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
-		}
-		else
-		{
-			possibleSquares--;
 		}
 		
 		//see if the square directly to the left of the king is in check
-		if(king.getColumn()!=0)
+		if(king.validMove(king.getRow(),king.getColumn()-1, chessBoard))
 		{
-			if(chessBoard[king.getRow()][king.getColumn()-1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player, king.getRow(), king.getColumn()-1))
+			possibleSquares++;
+			if(isInCheck(player, king.getRow(), king.getColumn()-1))
 			{
 				checkedSquares++;
 			}
-		}
-		else
-		{
-			possibleSquares--;
 		}
 		
 		//see if the square directly to the right of the the king is in check
-		if(king.getColumn()!=SIZE_OF_BOARD-1)
+		if(king.validMove(king.getRow(),king.getColumn()+1, chessBoard))
 		{
-			if(chessBoard[king.getRow()][king.getColumn()+1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player, king.getRow(), king.getColumn()+1))
+			possibleSquares++;
+			if(isInCheck(player, king.getRow(), king.getColumn()+1))
 			{
 				checkedSquares++;
 			}
-		}
-		else
-		{
-			possibleSquares--;
 		}
 		
 		//see if the square directly to the bottom left of the king is in check
-		if(king.getColumn()!=0 && king.getRow()!=0)
+		if(king.validMove(king.getRow()-1,king.getColumn()-1, chessBoard))
 		{
-			if(chessBoard[king.getRow()-1][king.getColumn()-1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player,king.getRow()-1,king.getColumn()-1))
+			possibleSquares++;
+			if(isInCheck(player,king.getRow()-1,king.getColumn()-1))
 			{
 				checkedSquares++;
 			}
-		}
-		else
-		{
-			possibleSquares--;
 		}
 		
 		//see if the square directly to the top left of the king is in check
-		if(king.getColumn()!=0 && king.getRow()!=SIZE_OF_BOARD-1)
+		if(king.validMove(king.getRow()+1,king.getColumn()-1, chessBoard))
 		{
-			if(chessBoard[king.getRow()+1][king.getColumn()-1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player,king.getRow()+1, king.getColumn()-1))
+			possibleSquares++;
+			if(isInCheck(player,king.getRow()+1, king.getColumn()-1))
 			{
 				checkedSquares++;
 			}
-		}
-		else
-		{
-			possibleSquares--;
 		}
 		
 		//see if the square directly to the top right of the king is in check
-		if(king.getColumn()!=SIZE_OF_BOARD-1 && king.getRow()!=SIZE_OF_BOARD-1)
+		if(king.validMove(king.getRow()+1,king.getColumn()+1, chessBoard))
 		{
-			if(chessBoard[king.getRow()+1][king.getColumn()+1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player,king.getRow()+1,king.getColumn()+1))
+			possibleSquares++;
+			if(isInCheck(player,king.getRow()+1,king.getColumn()+1))
 			{
 				checkedSquares++;
 			}
-		}
-		else
-		{
-			possibleSquares--;
 		}
 		
 		//see if the square directly to the bottom right of the king is in check
-		if(king.getColumn()!=SIZE_OF_BOARD-1 && king.getRow()!=0)
+		if(king.validMove(king.getRow()-1,king.getColumn()+1, chessBoard))
 		{
-			if(chessBoard[king.getRow()-1][king.getColumn()+1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player,king.getRow()-1,king.getColumn()+1))
+			possibleSquares++;
+			if(isInCheck(player,king.getRow()-1,king.getColumn()+1))
 			{
 				checkedSquares++;
 			}
 		}
+	
+		//if all squares the king can move to are in check, the player is checkmated.
+		if(checkedSquares==possibleSquares)
+		{
+			return true;
+		}
 		else
 		{
-			possibleSquares--;
+			return false;
 		}
 		
 		//if all squares the king can move to are in check, the player is checkmated
@@ -547,140 +502,97 @@ public class ChessBoard
 	{
 		ChessPiece king=findKing(player);
 		int checkedSquares=0;
-		int possibleSquares=8;
+		//only check the squares around the king, so we start at 0 and not 1
+		int possibleSquares=0;
 	
-		if(king.getRow()!=SIZE_OF_BOARD-1)
+		// see if the square directly above the king is in check
+		if (king.validMove(king.getRow() + 1, king.getColumn(), chessBoard))
 		{
-			if(chessBoard[king.getRow()+1][king.getColumn()]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player, king.getRow()+1, king.getColumn()))
+			possibleSquares++;
+			if (isInCheck(player, king.getRow() + 1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
 		}
-		else
+
+		// see if the square directly below the king is in check
+		if (king.validMove(king.getRow() - 1, king.getColumn(), chessBoard))
 		{
-			possibleSquares--;
-		}
-		
-		if(king.getRow()!=0)
-		{
-			if(chessBoard[king.getRow()-1][king.getColumn()]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player, king.getRow()-1, king.getColumn()))
+			possibleSquares++;
+			if (isInCheck(player, king.getRow() - 1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
 		}
-		else
+
+		// see if the square directly to the left of the king is in check
+		if (king.validMove(king.getRow(), king.getColumn() - 1, chessBoard))
 		{
-			possibleSquares--;
-		}
-	
-		if(king.getColumn()!=0)
-		{
-			if(chessBoard[king.getRow()][king.getColumn()-1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player, king.getRow(), king.getColumn()-1))
+			possibleSquares++;
+			if (isInCheck(player, king.getRow(), king.getColumn() - 1))
 			{
 				checkedSquares++;
 			}
 		}
-		else
+
+		// see if the square directly to the right of the the king is in check
+		if (king.validMove(king.getRow(), king.getColumn() + 1, chessBoard))
 		{
-			possibleSquares--;
-		}
-		
-		if(king.getColumn()!=SIZE_OF_BOARD-1)
-		{
-			if(chessBoard[king.getRow()][king.getColumn()+1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player, king.getRow(), king.getColumn()+1))
+			possibleSquares++;
+			if (isInCheck(player, king.getRow(), king.getColumn() + 1))
 			{
 				checkedSquares++;
 			}
 		}
-		else
+
+		// see if the square directly to the bottom left of the king is in check
+		if (king.validMove(king.getRow() - 1, king.getColumn() - 1, chessBoard))
 		{
-			possibleSquares--;
-		}
-		
-		if(king.getColumn()!=0 && king.getRow()!=0)
-		{
-			if(chessBoard[king.getRow()-1][king.getColumn()-1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player,king.getRow()-1,king.getColumn()-1))
+			possibleSquares++;
+			if (isInCheck(player, king.getRow() - 1, king.getColumn() - 1))
 			{
 				checkedSquares++;
 			}
 		}
-		else
+
+		// see if the square directly to the top left of the king is in check
+		if (king.validMove(king.getRow() + 1, king.getColumn() - 1, chessBoard))
 		{
-			possibleSquares--;
-		}
-		
-		if(king.getColumn()!=0 && king.getRow()!=SIZE_OF_BOARD-1)
-		{
-			if(chessBoard[king.getRow()+1][king.getColumn()-1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player,king.getRow()+1, king.getColumn()-1))
+			possibleSquares++;
+			if (isInCheck(player, king.getRow() + 1, king.getColumn() - 1))
 			{
 				checkedSquares++;
 			}
 		}
-		else
+
+		// see if the square directly to the top right of the king is in check
+		if (king.validMove(king.getRow() + 1, king.getColumn() + 1, chessBoard))
 		{
-			possibleSquares--;
-		}
-		
-		if(king.getColumn()!=SIZE_OF_BOARD-1 && king.getRow()!=SIZE_OF_BOARD-1)
-		{
-			if(chessBoard[king.getRow()+1][king.getColumn()+1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player,king.getRow()+1,king.getColumn()+1))
+			possibleSquares++;
+			if (isInCheck(player, king.getRow() + 1, king.getColumn() + 1))
 			{
 				checkedSquares++;
 			}
 		}
-		else
+
+		// see if the square directly to the bottom right of the king is in check
+		if (king.validMove(king.getRow() - 1, king.getColumn() + 1, chessBoard))
 		{
-			possibleSquares--;
-		}
-		
-		if(king.getColumn()!=SIZE_OF_BOARD-1 && king.getRow()!=0)
-		{
-			if(chessBoard[king.getRow()-1][king.getColumn()+1]!=null)
-			{
-				possibleSquares--;
-			}
-			else if(isInCheck(player,king.getRow()-1,king.getColumn()+1))
+			possibleSquares++;
+			if (isInCheck(player, king.getRow() - 1, king.getColumn() + 1))
 			{
 				checkedSquares++;
 			}
 		}
-		else
-		{
-			possibleSquares--;
-		}
-		
-		if(possibleSquares!=0 && checkedSquares==possibleSquares)
+
+		/* if all squares the king can move to are in check, the player is checkmated.If the king 
+		 * is surrounded by pieces of the same colour, both possibleSquares and checkedSquares 
+		 * would be 0, and the method wrongly say that the king is in a stalemate. So we make 
+		 * sure possbielSquares is different than 0.*/
+		if (possibleSquares != 0 && checkedSquares == possibleSquares)
 		{
 			return true;
-		}
+		} 
 		else
 		{
 			return false;
