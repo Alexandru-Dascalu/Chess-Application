@@ -156,7 +156,7 @@ public class ChessBoard
 	/*method for moving a piece on the board in the castling move, only used in the 
 	 * castling method so its private.Castling would not normally be valid, so we dont
 	 * call the valid move method of the piece.*/
-	public void movePieceNoValidation(ChessPiece piece, int row, int column)
+	private void movePieceNoValidation(ChessPiece piece, int row, int column)
 	{
 		//set the original square of the piece to be empty
 		chessBoard[piece.getRow()][piece.getColumn()]=null;
