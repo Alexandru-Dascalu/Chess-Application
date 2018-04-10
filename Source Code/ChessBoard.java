@@ -95,19 +95,20 @@ public class ChessBoard
 				 *  a square would be in check after you would move the king to that square. Else,
 				 *  the king might block the reach of an enemy piece to that square, but after 
 				 *  you moved the king, the king would be in the reach of an enemy piece and in check.*/
-				if(isInCheck(piece,row,column))
+				if(isInCheck(piece.getPlayer(),row,column))
 				{
 					return false;
 				}
 			}
+			
 			//if an enemy piece is captured, we remove the captured piece from the appropriate list
 			if(chessBoard[row][column]!=null)
 			{
-				if(chessBoard[row][column].isWhite() && !piece.isWhite())
+				if(chessBoard[row][column].getPlayer()==ChessPlayer.white)
 				{
 					whitePieces.remove(chessBoard[row][column]);
 				}
-				else if(!chessBoard[row][column].isWhite() && piece.isWhite())
+				else if(chessBoard[row][column].getPlayer()==ChessPlayer.black)
 				{
 					blackPieces.remove(chessBoard[row][column]);
 				}
@@ -119,11 +120,11 @@ public class ChessBoard
 			else if(piece.getType()==PieceType.pawn && piece.getRow()+piece.getDirection()==row && Math.abs(column-piece.getColumn())==1 
 					&& chessBoard[piece.getRow()][column]!=null && chessBoard[piece.getRow()][column].hasMoved2Spaces())
 			{
-				if(chessBoard[piece.getRow()][column].isWhite() && !piece.isWhite())
+				if(chessBoard[piece.getRow()][column].getPlayer()==ChessPlayer.white)
 				{
 					whitePieces.remove(chessBoard[piece.getRow()][column]);
 				}
-				else if(!chessBoard[piece.getRow()][column].isWhite() && piece.isWhite())
+				else if(chessBoard[piece.getRow()][column].getPlayer()==ChessPlayer.black)
 				{
 					blackPieces.remove(chessBoard[piece.getRow()][column]);
 				}
@@ -181,16 +182,7 @@ public class ChessBoard
 		}
 		else if(chessBoard[row][column].canBePromoted())
 		{
-			//we find out the colour of the piece to assign the new piece the proper colour
-			ChessPlayer player;
-			if(chessBoard[row][column].isWhite())
-			{
-				player=ChessPlayer.white;
-			}
-			else
-			{
-				player=ChessPlayer.black;
-			}
+			ChessPlayer player=chessBoard[row][column].getPlayer();
 			//remove the old piece from the correct list of pieces
 			getAppropiateList(player).remove(chessBoard[row][column]);
 			
@@ -212,7 +204,7 @@ public class ChessBoard
 	/*Method for the castling move. It is a move that involves moving the king 2 squares towards a rook while
 	 * simultaneously moving the rook to the square over which the king passed.Method returns false if such
 	 * a move is not possible, or returns true after moving the pieces if the move is possbile. It takes in 
-	 * a ChessPlayer enumerated object so that it knows which player wants to know, and the column of the rook
+	 * a ChessPlayer enumerated object so that it knows which player wants to make the move, and the column of the rook
 	 * it wants to move, since we need to know which of the two rooks the player wants to move. Method checks
 	 * if the column given has a rook, so the method will return false if a column that does not have a rook is entered.*/
 	public boolean castling(ChessPlayer player, int rookColumn)
@@ -254,24 +246,25 @@ public class ChessBoard
 			return false;
 		}
 		//the king must not currently be in check
-		else if(isInCheck(chessBoard[rookRow][4],rookRow,4))
+		else if(isInCheck(player,rookRow,4))
 		{
 			return false;
 		}
 		
 		//the king must not jump over or land over a square that is in check, these squares have
 		//different columns depending on the row, so we have two else ifs
-		if(rookColumn==0 && (isInCheck(chessBoard[rookRow][3],rookRow,3) || isInCheck(chessBoard[rookRow][2], rookRow,2)))
+		if(rookColumn==0 && (isInCheck(player,rookRow,3) || isInCheck(player, rookRow,2)))
 		{
 			return false;
 		}			
-		else if(rookColumn==7 && (isInCheck(chessBoard[rookRow][5],rookRow,5) || isInCheck(chessBoard[rookRow][6], rookRow,6)))
+		else if(rookColumn==7 && (isInCheck(player,rookRow,5) || isInCheck(player, rookRow,6)))
 		{	
 			return false;
 		}
 		//if it as not returned false by know, the move can be done
 		else
 		{
+			
 			/*Depending on the column of the rook being moved, the king and rook 
 			 * land on different squares in each case. After the move is made, 
 			 * we set the hasMoved boolean to true and the method returns true*/
@@ -298,8 +291,7 @@ public class ChessBoard
 		}
 	}
 	
-	/*Method finds the king of a certain player .Method used in the main method when checking 
-	 * if the king is in check or for detecting a check mate.It finds the king 
+	/*Method finds the king of a certain player .Method used for detecting a check mate.It finds the king 
 	 * so that we can call the isInCheck method, which has 2 integers and a ChessPlayer as 
 	 * parameters. As a parameters it has a ChessPlayer so that we know which king to find.*/
 	public ChessPiece findKing(ChessPlayer player)
@@ -320,47 +312,26 @@ public class ChessBoard
 	/*Method finds out if ,had a king be in a certain position, the king would be in check.
 	 * Parameters are a ChessPlayer, so that we know which whose player's piece would be in 
 	 * check, and a row and a column integer, to know which square we see if it is threatened.*/
-	public boolean isInCheck(ChessPiece piece,int row, int column)
+	public boolean isInCheck(ChessPlayer player,int row, int column)
 	{
-		
-		/*if there is a piece that would be moved if the square would not be in check, we need to
-		 * take it off the board temporarily, so that this method detects if the square at the given
-		 *  coordinates would in check or not after the piece moved. Now, the square might be 
-		 *  protected from enemy reach by the piece, but after we move the piece, the piece would
-		 *   be in check, because there is nothing between the enemy piece and the square you moved 
-		 *   the piece to.*/
-		if(piece!=null)
-		{
-			chessBoard[piece.getRow()][piece.getColumn()]=null;
-		}
-		
-		//we go through all the pieces of the enemy and see if there is one 
-		//which could move to the specified square, if we find one, it is in check and we stop
-		if(piece.isWhite())
+		/*we go through all the pieces of the enemy and see if there is one 
+		 *which could move to the specified square, if we find one, it is in check and we return true*/
+		if(player==ChessPlayer.white)
 		{	
 			for (ChessPiece elem: blackPieces)
 			{
 				if(elem.getType()!=PieceType.pawn && elem.validMove(row, column,chessBoard))
 				{
-					//put the piece back on the board
-					if(piece!=null)
-					{
-						chessBoard[piece.getRow()][piece.getColumn()]=piece;
-					}
 					return true;
 				}
 				/*pawns capture pieces only on the diagonal. The validPawnMove method also checks that 
 				 * the specified square is occupied.Since isInCheck also checks if empty squares would 
-				 * be under check, we treat pawns separately.*/
+				 * be under check, we treat pawns separately, and we check if the pawn could move on the
+				 * diagonal forward to the square we are checking.*/
 				else if(elem.getType()==PieceType.pawn)
 				{
 					if(elem.getRow()+elem.getDirection()==row && Math.abs(elem.getColumn()-column)==1)
 					{
-						//put the piece back on the board
-						if(piece!=null)
-						{
-							chessBoard[piece.getRow()][piece.getColumn()]=piece;
-						}
 						return true;
 					}
 				}
@@ -372,22 +343,12 @@ public class ChessBoard
 			{
 				if(elem.getType()!=PieceType.pawn && elem.validMove(row, column,chessBoard))
 				{
-					//put the piece back on the board
-					if(piece!=null)
-					{
-						chessBoard[piece.getRow()][piece.getColumn()]=piece;
-					}
 					return true;
 				}
 				else if(elem.getType()==PieceType.pawn)
 				{
 					if(elem.getRow()+elem.getDirection()==row && Math.abs(elem.getColumn()-column)==1)
 					{
-						//put the piece back on the board
-						if(piece!=null)
-						{
-							chessBoard[piece.getRow()][piece.getColumn()]=piece;
-						}
 						return true;
 					}
 				}
@@ -415,7 +376,7 @@ public class ChessBoard
 		int possibleSquares=1;
 		
 		//see if the square the king is on is in check
-		if(isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow(), king.getColumn()))
+		if(isInCheck(king.getPlayer(), king.getRow(), king.getColumn()))
 		{
 			checkedSquares++;
 		}
@@ -431,7 +392,7 @@ public class ChessBoard
 		if(king.validMove(king.getRow()+1,king.getColumn(), chessBoard))
 		{
 			possibleSquares++;
-			if(isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow()+1, king.getColumn()))
+			if(isInCheck(king.getPlayer(), king.getRow()+1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
@@ -441,7 +402,7 @@ public class ChessBoard
 		if(king.validMove(king.getRow()-1,king.getColumn(), chessBoard))
 		{
 			possibleSquares++;
-			if(isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow()-1, king.getColumn()))
+			if(isInCheck(king.getPlayer(), king.getRow()-1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
@@ -451,7 +412,7 @@ public class ChessBoard
 		if(king.validMove(king.getRow(),king.getColumn()-1, chessBoard))
 		{
 			possibleSquares++;
-			if(isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow(), king.getColumn()-1))
+			if(isInCheck(king.getPlayer(), king.getRow(), king.getColumn()-1))
 			{
 				checkedSquares++;
 			}
@@ -461,7 +422,7 @@ public class ChessBoard
 		if(king.validMove(king.getRow(),king.getColumn()+1, chessBoard))
 		{
 			possibleSquares++;
-			if(isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow(), king.getColumn()+1))
+			if(isInCheck(king.getPlayer(), king.getRow(), king.getColumn()+1))
 			{
 				checkedSquares++;
 			}
@@ -471,7 +432,7 @@ public class ChessBoard
 		if(king.validMove(king.getRow()-1,king.getColumn()-1, chessBoard))
 		{
 			possibleSquares++;
-			if(isInCheck(chessBoard[king.getRow()][king.getColumn()],king.getRow()-1,king.getColumn()-1))
+			if(isInCheck(king.getPlayer(),king.getRow()-1,king.getColumn()-1))
 			{
 				checkedSquares++;
 			}
@@ -481,7 +442,7 @@ public class ChessBoard
 		if(king.validMove(king.getRow()+1,king.getColumn()-1, chessBoard))
 		{
 			possibleSquares++;
-			if(isInCheck(chessBoard[king.getRow()][king.getColumn()],king.getRow()+1, king.getColumn()-1))
+			if(isInCheck(king.getPlayer(),king.getRow()+1, king.getColumn()-1))
 			{
 				checkedSquares++;
 			}
@@ -491,7 +452,7 @@ public class ChessBoard
 		if(king.validMove(king.getRow()+1,king.getColumn()+1, chessBoard))
 		{
 			possibleSquares++;
-			if(isInCheck(chessBoard[king.getRow()][king.getColumn()],king.getRow()+1,king.getColumn()+1))
+			if(isInCheck(king.getPlayer(),king.getRow()+1,king.getColumn()+1))
 			{
 				checkedSquares++;
 			}
@@ -501,7 +462,7 @@ public class ChessBoard
 		if(king.validMove(king.getRow()-1,king.getColumn()+1, chessBoard))
 		{
 			possibleSquares++;
-			if(isInCheck(chessBoard[king.getRow()][king.getColumn()],king.getRow()-1,king.getColumn()+1))
+			if(isInCheck(king.getPlayer(),king.getRow()-1,king.getColumn()+1))
 			{
 				checkedSquares++;
 			}
@@ -519,8 +480,9 @@ public class ChessBoard
 		}
 	}
 	
-	//method determines whether or not a king is in a check mate
-	//parameter is a ChessPlayer so we know which king we need to check
+	/*method determines whether there is a stalemate,meaning the king is not in check, 
+	 *but any possible move would place him in check. Same as the previous method, 
+	 *but does not check the square the king is on .*/
 	public boolean isStalemate(ChessPlayer player)
 	{
 		ChessPiece king=findKing(player);
@@ -532,7 +494,7 @@ public class ChessBoard
 		if (king.validMove(king.getRow() + 1, king.getColumn(), chessBoard))
 		{
 			possibleSquares++;
-			if (isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow() + 1, king.getColumn()))
+			if (isInCheck(king.getPlayer(), king.getRow() + 1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
@@ -542,7 +504,7 @@ public class ChessBoard
 		if (king.validMove(king.getRow() - 1, king.getColumn(), chessBoard))
 		{
 			possibleSquares++;
-			if (isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow() - 1, king.getColumn()))
+			if (isInCheck(king.getPlayer(), king.getRow() - 1, king.getColumn()))
 			{
 				checkedSquares++;
 			}
@@ -552,7 +514,7 @@ public class ChessBoard
 		if (king.validMove(king.getRow(), king.getColumn() - 1, chessBoard))
 		{
 			possibleSquares++;
-			if (isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow(), king.getColumn() - 1))
+			if (isInCheck(king.getPlayer(), king.getRow(), king.getColumn() - 1))
 			{
 				checkedSquares++;
 			}
@@ -562,7 +524,7 @@ public class ChessBoard
 		if (king.validMove(king.getRow(), king.getColumn() + 1, chessBoard))
 		{
 			possibleSquares++;
-			if (isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow(), king.getColumn() + 1))
+			if (isInCheck(king.getPlayer(), king.getRow(), king.getColumn() + 1))
 			{
 				checkedSquares++;
 			}
@@ -572,7 +534,7 @@ public class ChessBoard
 		if (king.validMove(king.getRow() - 1, king.getColumn() - 1, chessBoard))
 		{
 			possibleSquares++;
-			if (isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow() - 1, king.getColumn() - 1))
+			if (isInCheck(king.getPlayer(), king.getRow() - 1, king.getColumn() - 1))
 			{
 				checkedSquares++;
 			}
@@ -582,7 +544,7 @@ public class ChessBoard
 		if (king.validMove(king.getRow() + 1, king.getColumn() - 1, chessBoard))
 		{
 			possibleSquares++;
-			if (isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow() + 1, king.getColumn() - 1))
+			if (isInCheck(king.getPlayer(), king.getRow() + 1, king.getColumn() - 1))
 			{
 				checkedSquares++;
 			}
@@ -592,7 +554,7 @@ public class ChessBoard
 		if (king.validMove(king.getRow() + 1, king.getColumn() + 1, chessBoard))
 		{
 			possibleSquares++;
-			if (isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow() + 1, king.getColumn() + 1))
+			if (isInCheck(king.getPlayer(), king.getRow() + 1, king.getColumn() + 1))
 			{
 				checkedSquares++;
 			}
@@ -602,7 +564,7 @@ public class ChessBoard
 		if (king.validMove(king.getRow() - 1, king.getColumn() + 1, chessBoard))
 		{
 			possibleSquares++;
-			if (isInCheck(chessBoard[king.getRow()][king.getColumn()], king.getRow() - 1, king.getColumn() + 1))
+			if (isInCheck(king.getPlayer(), king.getRow() - 1, king.getColumn() + 1))
 			{
 				checkedSquares++;
 			}
@@ -671,10 +633,4 @@ public class ChessBoard
 		System.out.print("\n\n");
 	}
 	
-	//method takes a char and converts to an associated integer, a becomes 1, b be becomes 2 ,and so on
-	//real chess boards note columns with letters so this method is necessary
-	public int charToInt(char letter)
-	{
-		return (int)(letter)-96;
-	}
 }

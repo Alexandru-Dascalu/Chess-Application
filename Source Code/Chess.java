@@ -7,18 +7,26 @@ public class Chess
 		Scanner kb=new Scanner(System.in);
 		boolean cont=true;
 		boolean nextPlayer=true;
-		boolean whitePlayer=false;
+		ChessPlayer currentPlayer=ChessPlayer.black;
 		
 		board.printChessBoard();
 		
+		//System.out.println(board.isCheckMate(ChessPlayer.white));
 		while (cont)
-		{		
+		{
 			if(nextPlayer)
 			{
-				whitePlayer=!whitePlayer;
+				if(currentPlayer==ChessPlayer.white)
+				{
+					currentPlayer=ChessPlayer.black;
+				}
+				else
+				{
+					currentPlayer=ChessPlayer.white;
+				}
 			}
 			
-			if(whitePlayer)
+			if(currentPlayer==ChessPlayer.white)
 			{
 				System.out.println("It is the turn of the white player.");
 			}
@@ -60,7 +68,7 @@ public class Chess
 						int finalRow=readRow();
 						char finalColumn=readColumn();
 						
-						if(board.getPiece(row-1,charToInt(column)-1).isWhite()==whitePlayer)
+						if(board.getPiece(row-1,charToInt(column)-1).getPlayer()==currentPlayer)
 						{
 							if(board.movePiece(board.getPiece(row-1,charToInt(column)-1),finalRow-1,charToInt(finalColumn)-1))
 							{
@@ -85,17 +93,8 @@ public class Chess
 				case 2:
 					System.out.println("Type in the column of the rook you want to use.");
 					char rookColumn=readColumn();
-					ChessPlayer player;
-					if(whitePlayer)
-					{
-						player=ChessPlayer.white;
-					}
-					else
-					{
-						player=ChessPlayer.black;
-					}
 					
-					if(board.castling(player,charToInt(rookColumn)-1))
+					if(board.castling(currentPlayer,charToInt(rookColumn)-1))
 					{
 						System.out.println("Move successful!");
 						nextPlayer=true;
@@ -166,7 +165,7 @@ public class Chess
 					if(yesNo.equalsIgnoreCase("yes"))
 					{
 						cont=false;
-						String winner=(whitePlayer) ? "black": "white";
+						String winner=(currentPlayer==ChessPlayer.white) ? "black": "white";
 						System.out.println("The winner is the "+winner+" player!");
 					}
 					else

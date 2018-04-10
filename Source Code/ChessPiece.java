@@ -9,12 +9,15 @@
  *  a new position is not blocked by other pieces.*/
 public class ChessPiece 
 {
-	private final boolean isWhite;
+	//ChessPlayer is an enumerated type that shows the colour of the piece, white or black
+	private final ChessPlayer player;
 	//piecetype is an enumerated type to only allow possible values
 	private final PieceType pieceType;
 	private int row, column;
-	// ...
+
+	//true if the piece has moved at least once
 	private boolean hasMoved;
+	
 	//true if the piece is a pawn and has moved 2 spaces in the previous move
 	private boolean moved2Spaces;
 	
@@ -25,19 +28,22 @@ public class ChessPiece
 	 *direction is -1 so moving ahead decreases the row. If its white, direction is 1.*/
 	private final int direction;
 	
+	/*Constructor has parameters that specify the piece's type, team, and position*/
 	public ChessPiece(PieceType type, ChessPlayer player, int row, int column)
 	{
+		//set team related variables
+		this.player=player;
+		
 		if(player==ChessPlayer.white)
 		{
-			isWhite=true;
 			direction=1;
 		}
 		else
 		{
-			isWhite=false;
 			direction=-1;
 		}
 		
+		//set position
 		this.row=row;
 		this.column=column;
 		
@@ -60,7 +66,7 @@ public class ChessPiece
 	//method sets hasMoved to true, needed in the castling method in the ChessBoard class 
 	public void setHasMoved()
 	{
-			hasMoved=true;
+		hasMoved=true;
 	}
 	
 	//method sets moved2Spaces to a specified boolean value
@@ -80,9 +86,9 @@ public class ChessPiece
 		return column;
 	}
 	
-	public boolean isWhite()
+	public ChessPlayer getPlayer()
 	{
-		return isWhite;
+		return player;
 	}
 	
 	public PieceType getType()
@@ -122,8 +128,7 @@ public class ChessPiece
 		else if(board[row][column]!=null)
 		{
 			//for all piece types, you cannot capture your own pieces
-			if((board[row][column].isWhite() && isWhite()) || 
-					(!board[row][column].isWhite() && !isWhite()))
+			if(player==board[row][column].getPlayer())
 			{
 				return false;
 			}
@@ -148,6 +153,7 @@ public class ChessPiece
 				return false;
 		}
 	}
+	
 	//method to determine whether a pawn move is valid
 	private boolean validPawnMove(int row, int column, ChessPiece[][] board)
 	{
@@ -176,8 +182,7 @@ public class ChessPiece
 		else if (this.row+direction==row && Math.abs(column-this.column)==1 && board[row][column]==null 
 				&& board[row-direction][column]!=null && board[row-direction][column].hasMoved2Spaces())
 		{
-			if((board[row-direction][column].isWhite() && !this.isWhite) ||
-					(!board[row-direction][column].isWhite() && this.isWhite()))
+			if(player!=board[row-direction][column].getPlayer())
 			{
 				moved2Spaces=false;
 				return true;
@@ -411,11 +416,11 @@ public class ChessPiece
 		}
 		/*A pawn can only be promoted if it has reached the other end of the board, opposite 
 		 * from where they started. White pawns need to get to row 7, and black pawns need to get to row 0.*/
-		else if(isWhite && this.row==7)
+		else if(player==ChessPlayer.white && this.row==7)
 		{
 			return true;
 		}
-		else if(!isWhite && this.row==0)
+		else if(player==ChessPlayer.black && this.row==0)
 		{
 			return true;
 		}
@@ -434,7 +439,7 @@ public class ChessPiece
 		
 		/*Format of the string will be ColourPiece, so WK means White King, BR means black rook, etc. 
 		 * We assign the colour letter first*/
-		if(isWhite)
+		if(player==ChessPlayer.white)
 		{
 			abreviation="W";
 		}
