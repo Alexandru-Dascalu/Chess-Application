@@ -104,30 +104,18 @@ public class ChessBoard
 			//if an enemy piece is captured, we remove the captured piece from the appropriate list
 			if(chessBoard[row][column]!=null)
 			{
-				if(chessBoard[row][column].getPlayer()==ChessPlayer.white)
-				{
-					whitePieces.remove(chessBoard[row][column]);
-				}
-				else if(chessBoard[row][column].getPlayer()==ChessPlayer.black)
-				{
-					blackPieces.remove(chessBoard[row][column]);
-				}
+				getAppropiateList(chessBoard[row][column].getPlayer()).remove(chessBoard[row][column]);
 			}
+			
 			/*in the en passant movement, the piece that is captured is not on the square you move 
 			 * your piece to. So, if the square you move to is empty, we check if you are doing an
 			 * en passant move, we remove the captured pawn from the correct list and remove it 
 			 * from the board*/
-			else if(piece.getType()==PieceType.pawn && piece.getRow()+piece.getDirection()==row && Math.abs(column-piece.getColumn())==1 
-					&& chessBoard[piece.getRow()][column]!=null && chessBoard[piece.getRow()][column].hasMoved2Spaces())
+			else if(piece.getType()==PieceType.pawn && piece.getRow()+piece.getDirection()==row &&
+					Math.abs(column-piece.getColumn())==1 && chessBoard[piece.getRow()][column]!=null
+					&& chessBoard[piece.getRow()][column].hasMoved2Spaces())
 			{
-				if(chessBoard[piece.getRow()][column].getPlayer()==ChessPlayer.white)
-				{
-					whitePieces.remove(chessBoard[piece.getRow()][column]);
-				}
-				else if(chessBoard[piece.getRow()][column].getPlayer()==ChessPlayer.black)
-				{
-					blackPieces.remove(chessBoard[piece.getRow()][column]);
-				}
+				getAppropiateList(chessBoard[piece.getRow()][column].getPlayer()).remove(chessBoard[piece.getRow()][column]);
 				
 				chessBoard[piece.getRow()][column]=null;
 				piece.setMoved2Spaces(true);
@@ -314,14 +302,25 @@ public class ChessBoard
 	 * check, and a row and a column integer, to know which square we see if it is threatened.*/
 	public boolean isInCheck(ChessPlayer player,int row, int column)
 	{
+		/*if there is a piece that would be moved if the square would not be in check, we need to
+		 * take it off the board temporarily, so that this method detects if the square at the given
+		 * coordinates would in check or not after the piece moved. Now, the square might be 
+		 * protected from enemy reach by the piece, but after we move the piece, the piece would
+		 * be in check, because there is nothing between the enemy piece and the square you moved 
+		 * the piece to.*/
+		ChessPiece king=findKing(player);
+		chessBoard[king.getRow()][king.getColumn()]=null;
+		
 		/*we go through all the pieces of the enemy and see if there is one 
-		 *which could move to the specified square, if we find one, it is in check and we return true*/
+		 *which could move to the specified square, if we find one, it is in check and we return true.
+		 *Before returning, we put the king back on the chessboard.*/
 		if(player==ChessPlayer.white)
 		{	
 			for (ChessPiece elem: blackPieces)
 			{
 				if(elem.getType()!=PieceType.pawn && elem.validMove(row, column,chessBoard))
 				{
+					chessBoard[king.getRow()][king.getColumn()]=king;
 					return true;
 				}
 				/*pawns capture pieces only on the diagonal. The validPawnMove method also checks that 
@@ -332,6 +331,7 @@ public class ChessBoard
 				{
 					if(elem.getRow()+elem.getDirection()==row && Math.abs(elem.getColumn()-column)==1)
 					{
+						chessBoard[king.getRow()][king.getColumn()]=king;
 						return true;
 					}
 				}
@@ -343,18 +343,21 @@ public class ChessBoard
 			{
 				if(elem.getType()!=PieceType.pawn && elem.validMove(row, column,chessBoard))
 				{
+					chessBoard[king.getRow()][king.getColumn()]=king;
 					return true;
 				}
 				else if(elem.getType()==PieceType.pawn)
 				{
 					if(elem.getRow()+elem.getDirection()==row && Math.abs(elem.getColumn()-column)==1)
 					{
+						chessBoard[king.getRow()][king.getColumn()]=king;
 						return true;
 					}
 				}
 			}
 		}
 		//if no enemy piece can move to the square, it is not in check
+		chessBoard[king.getRow()][king.getColumn()]=king;
 		return false;
 	}
 	
