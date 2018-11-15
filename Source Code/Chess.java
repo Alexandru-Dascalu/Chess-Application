@@ -64,27 +64,37 @@ public class Chess
 						int row=readRow();
 						char column=readColumn();
 						
-						System.out.println("Type in where you want to move the piece.");
-						int finalRow=readRow();
-						char finalColumn=readColumn();
-						
-						if(board.getPiece(row-1,charToInt(column)-1).getPlayer()==currentPlayer)
+						ChessPiece chosenPiece=board.getPiece(row-1,charToInt(column)-1);
+						if(chosenPiece==null || chosenPiece.getPlayer()!=currentPlayer)
 						{
-							if(board.movePiece(board.getPiece(row-1,charToInt(column)-1),finalRow-1,charToInt(finalColumn)-1))
-							{
-								System.out.println("Move successful!");
-								repeat=false;
-							}
-							else
-							{
-								System.out.println("Invalid move.");
-								repeat=true;
-							}
+							System.out.println("There is no piece of yours at the given coordinates!");
+							repeat=true;
 						}
 						else
 						{
-							System.out.println("You can not move your opponents pieces!");
-							repeat=true;
+							System.out.println("Type in where you want to move the piece.");
+							int finalRow=readRow();
+							char finalColumn=readColumn();
+							
+							if(board.getPiece(row-1,charToInt(column)-1).getPlayer()==currentPlayer)
+							{
+								
+								if(board.movePiece(board.getPiece(row-1,charToInt(column)-1),finalRow-1,charToInt(finalColumn)-1))
+								{
+									System.out.println("Move successful!");
+									repeat=false;
+								}
+								else
+								{
+									System.out.println("Invalid move.");
+									repeat=true;
+								}
+							}
+							else
+							{
+								System.out.println("You can not move your opponents pieces!");
+								repeat=true;
+							}
 						}
 					}
 					while(repeat);
