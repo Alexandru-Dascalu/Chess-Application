@@ -54,6 +54,7 @@ public class Chess
 			}
 			while(answer<1 || answer>5);
 			
+			kb.nextLine();
 			switch(answer)
 			{
 				case 1:
@@ -114,8 +115,8 @@ public class Chess
 						System.out.println("Type in what type of piece you want to upgrade to. First letter must be uppercase.");
 						piece=kb.nextLine();
 					}
-					while(!piece.equals("Queen")||!piece.equals("Bishop") ||
-							!piece.equals("Knight") || !piece.equals("Rook"));
+					while(!piece.equals("Queen") && !piece.equals("Bishop") &&
+							!piece.equals("Knight") && !piece.equals("Rook"));
 					PieceType pieceType=PieceType.pawn;
 					
 					switch (piece)
