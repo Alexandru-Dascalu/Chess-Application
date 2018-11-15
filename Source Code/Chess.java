@@ -76,23 +76,15 @@ public class Chess
 							int finalRow=readRow();
 							char finalColumn=readColumn();
 							
-							if(board.getPiece(row-1,charToInt(column)-1).getPlayer()==currentPlayer)
+							
+							if(board.movePiece(board.getPiece(row-1,charToInt(column)-1),finalRow-1,charToInt(finalColumn)-1))
 							{
-								
-								if(board.movePiece(board.getPiece(row-1,charToInt(column)-1),finalRow-1,charToInt(finalColumn)-1))
-								{
-									System.out.println("Move successful!");
-									repeat=false;
-								}
-								else
-								{
-									System.out.println("Invalid move.");
-									repeat=true;
-								}
+								System.out.println("Move successful!");
+								repeat=false;
 							}
 							else
 							{
-								System.out.println("You can not move your opponents pieces!");
+								System.out.println("Invalid move.");
 								repeat=true;
 							}
 						}
