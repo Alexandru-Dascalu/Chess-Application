@@ -1,4 +1,11 @@
-
+/**
+ * Class models a pawn chess piece object. A pawn can only move in a forward 
+ * direction, and if it has not moved before, it can move 2 spaces forwards. This
+ * class ensures a pawn can only do valid chess moves for a pawn, including 
+ * the ability to do an en passant move.
+ * @author Alexandru Dascalu
+ * @version 1.0
+ */
 public class Pawn extends ChessPiece
 {
     /**A flag used to ensure validity of chess piece moves. True if the pawn
@@ -6,16 +13,29 @@ public class Pawn extends ChessPiece
     private boolean moved2Spaces;
     
     /**On a chessboard, for the white player, moving ahead increases the number
-     *of the row. For the black player, moving ahead decreases the number of 
-     *the row, since black pieces start from row 8 or 7. Since pawns can only 
-     *move ahead, we need to know what ahead means. Hence, if its black, the 
-     *direction is -1 so moving ahead decreases the row. If its white, direction is 1.*/
+     * of the row. For the black player, moving ahead decreases the number of 
+     * the row, since black pieces start from row 8 or 7. Since pawns can only 
+     * move ahead, we need to know what ahead means. Hence, if its black, the 
+     * direction is -1 so moving ahead decreases the row. If its white, direction is 1.*/
     private final int direction;
     
-    /*Constructor has parameters that specify the piece's type, team, and position*/
+    /**
+     * Creates a new Pawn chess piece object, ready to be used in the beginning
+     * of the game.
+     * @param player The player (or color) of this chess piece.
+     * @param row The starting row position of the chess piece.
+     * @param column The starting column position of the chess piece.
+     */
     public Pawn(PieceType type, ChessPlayer player, int row, int column)
     {
-        super(type, player, row, column);
+        super(player, row, column);
+        
+        /*Check the color of the piece in order to set the direction the pawn
+         * should move towards. White pieces start on rows 0 and 1, so moving 
+         * forward for them means to move to rows with larger indexes, which 
+         * is why direction is set to 1. Black pieces start on rows 7 and 8, so
+         * they move forward to rows with smaller indexes, and direction is 
+         * set to -1.*/
         if(player==ChessPlayer.white)
         {
             direction=1;
@@ -25,6 +45,10 @@ public class Pawn extends ChessPiece
             direction=-1;
         }
         
+        //set the correct type of the chess piece
+        pieceType = PieceType.pawn;
+        
+        //the piece has not moved yet, so it has not moved 2 spaces
         moved2Spaces=false;
     }
     
@@ -38,14 +62,6 @@ public class Pawn extends ChessPiece
         return direction;
     }
     
-    /**Sets the has moved flag to a new value.
-     * @param move the new value of wether or not this pawn has moved 2 spaces 
-     * in the previoues move.*/
-    public void setMoved2Spaces(boolean move)
-    {
-        moved2Spaces=move;
-    }
-    
     /**Gets the value of the flag telling you if the pawn has just moved by 2 
      * spaces.
      * @return true if this pawn has moved by 2 spaces in the last move, false 
@@ -55,9 +71,35 @@ public class Pawn extends ChessPiece
         return moved2Spaces;
     }
     
+    /**Sets the has moved flag to a new value.
+     * @param move the new value of whether or not this pawn has moved 2 spaces 
+     * in the previous move.*/
+    public void setMoved2Spaces(boolean move)
+    {
+        moved2Spaces=move;
+    }
+    
+    /**
+     * Check if a move of this piece to the square at the given coordinates of 
+     * the given chess board is valid or not, according to chess rules and 
+     * depending on the type of the chess piece. This method takes into account
+     * capturing enemy pieces diagonally, the en passant move, and moving 
+     * forward 2 spaces if the pawn has never moved.
+     * @param row The starting row of this piece.
+     * @param column The starting column of this piece.
+     * @param board The chess board this chess piece is on.
+     * @return True if the mov is valid, false if not.
+     */
     @Override
     public boolean validMove(int row, int column, ChessPiece[][] board)
     {
+        /*if the move would not be valid for any chess pieces, it is not valid.
+         * Else, go on with other checks.*/
+        if(!super.validMove(row, column, board))
+        {
+            return false;
+        }
+        
         //simple move forward, cant capture a piece this way
         if(this.row+direction==row && column==this.column && board[row][column]==null)
         {
@@ -86,7 +128,7 @@ public class Pawn extends ChessPiece
         {
             /*Check if the piece next to this pawn is also a pawn. If not, the
              * move is not valid.*/
-            if(board[row-direction][column].getClass() != Pawn.class)
+            if(board[row-direction][column].getType() != PieceType.pawn)
             {
                 return false;
             }
@@ -139,9 +181,9 @@ public class Pawn extends ChessPiece
        }
     }
     
-    /**Gives a string abreviation of this chess piece, showing its type and 
+    /**Gives a string abbreviation of this chess piece, showing its type and 
      * colour.
-     * @return an abreviation of this chess piece, showing its type and colour.*/
+     * @return an abbreviation of this chess piece, showing its type and colour.*/
     @Override
     public String toString()
     {

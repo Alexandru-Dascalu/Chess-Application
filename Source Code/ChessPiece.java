@@ -1,14 +1,10 @@
-/**Class models a chess piece object. It has an enumerated type representing its type, a boolean representing black
- * or white player, ints for the row and column, booleans for wether the piece has moved(used for pawns
- * and the castling move) and whether it has just moved 2 spaces(used for pawns), and an integer that is 1 
- * or -1 representing the direction of moving ahead for each team.
+/**Class models a chess piece object. It has a chess piece type, a type white 
+ * or black player, indexes of the starting row and column.
  * 
- * It has a constructor, a setter for the position, getters for all the variables, and method for each piece
- * type that determine whether a move is valid. It also has private methods that finds out whether a path to
- *  a new position is not blocked by other pieces.
- *  
- *  @author Alexandru Dascalu
- *  @version 1.2
+ * It offers methods to check if a move on the chess board to a certain position 
+ * is valid for the given chess piece, according to all recognised rules of chess.
+ * @author Alexandru Dascalu
+ * @version 1.2
  */
 public abstract class ChessPiece 
 {
@@ -17,7 +13,7 @@ public abstract class ChessPiece
 	protected final ChessPlayer player;
 	
 	/**piecetype is an enumerated type to only allow possible values*/
-	private final PieceType pieceType;
+	protected PieceType pieceType;
 	
 	/**The row position of the piece.*/
 	protected int row;
@@ -30,7 +26,7 @@ public abstract class ChessPiece
 	protected boolean hasMoved;
 	
 	/*Constructor has parameters that specify the piece's type, team, and position*/
-	public ChessPiece(PieceType type, ChessPlayer player, int row, int column)
+	public ChessPiece(ChessPlayer player, int row, int column)
 	{
 		//set team related variables
 		this.player=player;
@@ -39,7 +35,7 @@ public abstract class ChessPiece
 		this.row=row;
 		this.column=column;
 		
-		pieceType=type;
+		pieceType = null;
 		//the piece has not moved at all
 		hasMoved=false;
 	}
@@ -86,8 +82,19 @@ public abstract class ChessPiece
 		return hasMoved;
 	}
 	
-	//method to determine whether a move for a piece is valid, depending on the type 
-	//of the piece that is to be moved, it calls the appropiate method for that piece
+	/**
+	 * Check if a move of this piece to the square at the given coordinates of 
+	 * the given chess board is valid or not, according to chess rules and 
+	 * depending on the type of the chess piece. Unless overridden, this method 
+	 * just checks if the move would be valid for any type of piece (checking it 
+	 * is moved inside the chess board, that it is moved , and that you do not 
+	 * move a piece over another piece of yours), and should be called in the 
+	 * beginning of any override.
+	 * @param row The starting row of this piece.
+	 * @param column The starting column of this piece.
+	 * @param board The chess board this chess piece is on.
+	 * @return True if the mov is valid, false if not.
+	 */
 	public boolean validMove(int row, int column,ChessPiece[][] board)
 	{
 		//for all piece types, we cannot move it outside the chessBoard
@@ -100,7 +107,7 @@ public abstract class ChessPiece
 		{
 			return false;
 		}
-		//for all piece types, you cannot capture your own pieces
+		//check if the move would capture another piece.
 		else if(board[row][column]!=null)
 		{
 			if(player==board[row][column].getPlayer())
