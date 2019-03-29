@@ -1,4 +1,3 @@
-
 /**Class models a chess piece object. It has an enumerated type representing its type, a boolean representing black
  * or white player, ints for the row and column, booleans for wether the piece has moved(used for pawns
  * and the castling move) and whether it has just moved 2 spaces(used for pawns), and an integer that is 1 
@@ -10,20 +9,28 @@
  *  
  *  @author Alexandru Dascalu
  *  @version 1.2
- *
  */
 public class ChessPiece 
 {
-	//ChessPlayer is an enumerated type that shows the colour of the piece, white or black
+	/**ChessPlayer is an enumerated type that shows the colour of the piece, 
+	 * white or black*/
 	private final ChessPlayer player;
-	//piecetype is an enumerated type to only allow possible values
+	
+	/**piecetype is an enumerated type to only allow possible values*/
 	private final PieceType pieceType;
-	private int row, column;
+	
+	/**The row position of the piece.*/
+	private int row;
+	
+	/**The column position of the piece.*/
+	private int column;
 
-	//true if the piece has moved at least once
+	/**A flag used to ensure validity of chess piece moves. True if the piece
+	 * has moved at least once.*/
 	private boolean hasMoved;
 	
-	//true if the piece is a pawn and has moved 2 spaces in the previous move
+	/**A flag used to ensure validity of chess piece moves. True if the piece 
+	 * is a pawn and has moved 2 spaces in the previous move.*/
 	private boolean moved2Spaces;
 	
 	/*On a chessboard, for the white player, moving ahead increases the number
