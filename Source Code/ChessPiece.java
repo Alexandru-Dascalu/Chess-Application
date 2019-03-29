@@ -14,47 +14,27 @@ public class ChessPiece
 {
 	/**ChessPlayer is an enumerated type that shows the colour of the piece, 
 	 * white or black*/
-	private final ChessPlayer player;
+	protected final ChessPlayer player;
 	
 	/**piecetype is an enumerated type to only allow possible values*/
 	private final PieceType pieceType;
 	
 	/**The row position of the piece.*/
-	private int row;
+	protected int row;
 	
 	/**The column position of the piece.*/
-	private int column;
+	protected int column;
 
 	/**A flag used to ensure validity of chess piece moves. True if the piece
 	 * has moved at least once.*/
-	private boolean hasMoved;
-	
-	/**A flag used to ensure validity of chess piece moves. True if the piece 
-	 * is a pawn and has moved 2 spaces in the previous move.*/
-	private boolean moved2Spaces;
-	
-	/*On a chessboard, for the white player, moving ahead increases the number
-	 *of the row. For the black player, moving ahead decreases the number of 
-	 *the row, since black pieces start from row 8 or 7. Since pawns can only 
-	 *move ahead, we need to know what ahead means.Hence, if its black, the 
-	 *direction is -1 so moving ahead decreases the row. If its white, direction is 1.*/
-	private final int direction;
+	protected boolean hasMoved;
 	
 	/*Constructor has parameters that specify the piece's type, team, and position*/
 	public ChessPiece(PieceType type, ChessPlayer player, int row, int column)
 	{
 		//set team related variables
 		this.player=player;
-		
-		if(player==ChessPlayer.white)
-		{
-			direction=1;
-		}
-		else
-		{
-			direction=-1;
-		}
-		
+	
 		//set position
 		this.row=row;
 		this.column=column;
@@ -62,7 +42,6 @@ public class ChessPiece
 		pieceType=type;
 		//the piece has not moved at all
 		hasMoved=false;
-		moved2Spaces=false;
 	}
 	
 	//method sets the position of a piece to a new one
@@ -79,12 +58,6 @@ public class ChessPiece
 	public void setHasMoved()
 	{
 		hasMoved=true;
-	}
-	
-	//method sets moved2Spaces to a specified boolean value
-	public void setMoved2Spaces(boolean move)
-	{
-		moved2Spaces=move;
 	}
 	
 	//geters for all the variables
@@ -108,19 +81,9 @@ public class ChessPiece
 		return pieceType;
 	}
 	
-	public int getDirection()
-	{
-		return direction;
-	}
-	
 	public boolean hasMoved()
 	{
 		return hasMoved;
-	}
-	
-	public boolean hasMoved2Spaces()
-	{
-		return moved2Spaces;
 	}
 	
 	//method to determine whether a move for a piece is valid, depending on the type 
@@ -137,80 +100,18 @@ public class ChessPiece
 		{
 			return false;
 		}
+		//for all piece types, you cannot capture your own pieces
 		else if(board[row][column]!=null)
 		{
-			//for all piece types, you cannot capture your own pieces
 			if(player==board[row][column].getPlayer())
 			{
 				return false;
 			}
 		}
-		//if it has not returned false by now, we check specific conditions for each piece type
-		switch (pieceType)
-		{
-			case pawn:
-				return validPawnMove(row,column,board);
-			case knight:
-				return validKnightMove(row,column,board);
-			case rook:
-				return validRookMove(row,column,board);
-			case bishop:
-				return validBishopMove(row,column,board);
-			case queen:
-				return validQueenMove(row,column,board);
-			case king:
-				return validKingMove(row,column,board);
-				//default value so Java does not complain
-			default:
-				return false;
-		}
-	}
-	
-	//method to determine whether a pawn move is valid
-	private boolean validPawnMove(int row, int column, ChessPiece[][] board)
-	{
-		//simple move forward, cant capture a piece this way
-		if(this.row+direction==row && column==this.column && board[row][column]==null)
-		{
-			moved2Spaces=false;
-			return true;
-		}
-		//move forward 2 spaces if its the first move
-		//the final postion and the square the pawn jumps over must be empty
-		else if (this.row+2*direction==row && column==this.column && !hasMoved && 
-				board[row][column]==null && board[row-1][column]==null)
-		{
-			moved2Spaces=true;
-			return true;
-		}
-		//capture a piece one space on the diagonal
-		else if (this.row+direction==row && Math.abs(column-this.column)==1 && board[row][column]!=null )
-		{
-			moved2Spaces=false;
-			return true;
-		}
-		//en Passant movement, the space one square on the diagonal needs to be empty and next to your 
-		//piece there needs to be a pawn that has just moved 2 spaces, and that is of the opposite team
-		else if (this.row+direction==row && Math.abs(column-this.column)==1 && board[row][column]==null 
-				&& board[row-direction][column]!=null && board[row-direction][column].hasMoved2Spaces())
-		{
-			if(player!=board[row-direction][column].getPlayer())
-			{
-				moved2Spaces=false;
-				return true;
-			}
-			//if next to your pawn there is a pawn that has just moved 2 spaces of 
-			//the same colour, the move is invalid
-			else
-			{
-				return false;
-			}
-		}
-		//otherwise, its an invalid move
-		else
-		{
-			return false;
-		}
+		
+		/*otherwise, we can proceed to further checks to see if it is a valid
+		 * move, based on the overriding method*/
+		return true;
 	}
 	
 	//method determines whether a move is valid for a king
