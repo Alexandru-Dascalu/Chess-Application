@@ -106,7 +106,6 @@ public class ChessBoard
 			{
 				getAppropiateList(chessBoard[row][column].getPlayer()).remove(chessBoard[row][column]);
 			}
-			
 			/*in the en passant movement, the piece that is captured is not on the square you move 
 			 * your piece to. So, if the square you move to is empty, we check if you are doing an
 			 * en passant move, we remove the captured pawn from the correct list and remove it 

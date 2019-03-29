@@ -1,12 +1,17 @@
 
-/*Class models a chess piece object. It has an enumerated type representing its type, a boolean representing black
+/**Class models a chess piece object. It has an enumerated type representing its type, a boolean representing black
  * or white player, ints for the row and column, booleans for wether the piece has moved(used for pawns
  * and the castling move) and whether it has just moved 2 spaces(used for pawns), and an integer that is 1 
  * or -1 representing the direction of moving ahead for each team.
  * 
  * It has a constructor, a setter for the position, getters for all the variables, and method for each piece
  * type that determine whether a move is valid. It also has private methods that finds out whether a path to
- *  a new position is not blocked by other pieces.*/
+ *  a new position is not blocked by other pieces.
+ *  
+ *  @author Alexandru Dascalu
+ *  @version 1.2
+ *
+ */
 public class ChessPiece 
 {
 	//ChessPlayer is an enumerated type that shows the colour of the piece, white or black
