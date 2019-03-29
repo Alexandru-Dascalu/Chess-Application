@@ -117,6 +117,28 @@ public class Pawn extends ChessPiece
         }
     }
     
+    /**Checks if this chess piece can be promoted to a more powerful one.
+     * @return true if the chess piece can be promoted, false if not.*/
+    @Override
+    public boolean canBePromoted()
+    {
+       /*A pawn can only be promoted if it has reached the other end of the
+        * board, opposite from where they started. White pawns need to get to
+        * row 7, and black pawns need to get to row 0.*/
+       if(player==ChessPlayer.white && this.row==7)
+       {
+           return true;
+       }
+       else if(player==ChessPlayer.black && this.row==0)
+       {
+           return true;
+       }
+       else
+       {
+           return false;
+       }
+    }
+    
     /**Gives a string abreviation of this chess piece, showing its type and 
      * colour.
      * @return an abreviation of this chess piece, showing its type and colour.*/

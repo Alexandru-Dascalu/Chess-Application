@@ -10,7 +10,7 @@
  *  @author Alexandru Dascalu
  *  @version 1.2
  */
-public class ChessPiece 
+public abstract class ChessPiece 
 {
 	/**ChessPlayer is an enumerated type that shows the colour of the piece, 
 	 * white or black*/
@@ -297,29 +297,12 @@ public class ChessPiece
 		return true;
 	}
 	
-	//method determines whether the piece can be promoted to a more powerful one
+	/**Checks if this chess piece can be promoted to a more powerful one.
+	 * @return true if the chess piece can be promoted, false if not. Returns 
+	 * false unless overriden, since only pawns can be promoted.*/
 	public boolean canBePromoted()
 	{
-		//only pawns can be promoted
-		if(pieceType!=PieceType.pawn)
-		{
-			return false;
-		}
-		/*A pawn can only be promoted if it has reached the other end of the board, opposite 
-		 * from where they started. White pawns need to get to row 7, and black pawns need to get to row 0.*/
-		else if(player==ChessPlayer.white && this.row==7)
-		{
-			return true;
-		}
-		else if(player==ChessPlayer.black && this.row==0)
-		{
-			return true;
-		}
-		//else, it cant be promoted
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 	
 	/**Gives a string abreviation of this chess piece, showing its type and 
