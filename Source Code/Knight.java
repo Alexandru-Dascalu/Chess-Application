@@ -30,6 +30,9 @@ public class Knight extends ChessPiece
         }
     }
     
+    /**Gives a string abreviation of this chess piece, showing its type and 
+     * colour.
+     * @return an abreviation of this chess piece, showing its type and colour.*/
     @Override
     public String toString()
     {

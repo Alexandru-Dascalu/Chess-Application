@@ -322,46 +322,21 @@ public class ChessPiece
 		}
 	}
 	
-	//outputs an abbreviation of a piece based on its type and colour
+	/**Gives a string abreviation of this chess piece, showing its type and 
+	 * colour.
+	 * @return an abreviation of this chess piece, showing its type and colour.*/
 	@Override
 	public String toString()
 	{
-		String abreviation;
-		
 		/*Format of the string will be ColourPiece, so WK means White King, BR means black rook, etc. 
 		 * We assign the colour letter first*/
 		if(player==ChessPlayer.white)
 		{
-			abreviation="W";
+			return "W";
 		}
 		else
 		{
-			abreviation="B";
+			return "B";
 		}
-		
-		//assign the piece letter
-		switch (pieceType)
-		{
-			case pawn:
-				abreviation+="P";
-				break;
-			case rook:
-				abreviation+="R";
-				break;
-			case knight:
-				abreviation+="KN";
-				break;
-			case bishop:
-				abreviation+="B";
-				break;
-			case queen:
-				abreviation+="Q";
-				break;
-			case king:
-				abreviation+="K";
-				break;
-		}
-		
-		return abreviation;
 	}
 }

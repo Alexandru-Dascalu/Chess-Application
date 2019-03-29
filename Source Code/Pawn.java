@@ -55,6 +55,7 @@ public class Pawn extends ChessPiece
         return moved2Spaces;
     }
     
+    @Override
     public boolean validMove(int row, int column, ChessPiece[][] board)
     {
         //simple move forward, cant capture a piece this way
@@ -114,5 +115,14 @@ public class Pawn extends ChessPiece
         {
             return false;
         }
+    }
+    
+    /**Gives a string abreviation of this chess piece, showing its type and 
+     * colour.
+     * @return an abreviation of this chess piece, showing its type and colour.*/
+    @Override
+    public String toString()
+    {
+        return (super.toString() + "P");
     }
 }
