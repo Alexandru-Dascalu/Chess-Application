@@ -257,7 +257,7 @@ public abstract class ChessPiece
 	
 	//method finds out if there are pieces between the position of this piece and another square 
 	//on the board, both situated diagonally.Private because it is not used in the ChessBoard class
-	private boolean clearDiagonalPath(int finalRow, int finalColumn,
+	protected boolean clearDiagonalPath(int finalRow, int finalColumn,
 			ChessPiece[][] board)
 	{
 		/*We have to figure out in what direction does each axis position change,
