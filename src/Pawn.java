@@ -91,7 +91,7 @@ public class Pawn extends ChessPiece
      * @return True if the mov is valid, false if not.
      */
     @Override
-    public boolean validMove(int row, int column, ChessPiece[][] board)
+    public boolean validMove(int row, int column, ChessBoard board)
     {
         /*if the move would not be valid for any chess pieces, it is not valid.
          * Else, go on with other checks.*/
@@ -101,7 +101,8 @@ public class Pawn extends ChessPiece
         }
         
         //simple move forward, cant capture a piece this way
-        if(this.row+direction==row && column==this.column && board[row][column]==null)
+        if(this.row+direction==row && column==this.column &&
+                board.getPiece(row, column)==null)
         {
             moved2Spaces=false;
             return true;
@@ -109,13 +110,14 @@ public class Pawn extends ChessPiece
         //move forward 2 spaces if its the first move
         //the final postion and the square the pawn jumps over must be empty
         else if (this.row+2*direction==row && column==this.column && !hasMoved && 
-                board[row][column]==null && board[row-1][column]==null)
+                board.getPiece(row, column)==null && board.getPiece(row - 1, column)==null)
         {
             moved2Spaces=true;
             return true;
         }
         //capture a piece one space on the diagonal
-        else if (this.row+direction==row && Math.abs(column-this.column)==1 && board[row][column]!=null )
+        else if (this.row+direction==row && Math.abs(column-this.column)==1 && 
+                board.getPiece(row, column)!=null )
         {
             moved2Spaces=false;
             return true;
@@ -124,18 +126,18 @@ public class Pawn extends ChessPiece
          * empty and next to your piece there needs to be a pawn that has just 
          * moved 2 spaces, and that is of the opposite team.*/
         else if (this.row+direction==row && Math.abs(column-this.column)==1 
-                && board[row][column]==null && board[row-direction][column]!=null)
+                && board.getPiece(row, column)==null && board.getPiece(row-direction, column)!=null)
         {
             /*Check if the piece next to this pawn is also a pawn. If not, the
              * move is not valid.*/
-            if(board[row-direction][column].getType() != PieceType.pawn)
+            if(board.getPiece(row-direction, column).getType() != PieceType.pawn)
             {
                 return false;
             }
             /*Else, procced with final checks to see if the move is valid.*/
             else
             {
-                Pawn enemyPawn = (Pawn)board[row-direction][column];
+                Pawn enemyPawn = (Pawn)board.getPiece(row-direction, column);
                 
                 /*The pawn next to this pawn needs to be an enemy pawn and to 
                  * have just moved 2 spaces.*/

@@ -30,7 +30,7 @@ public class Knight extends ChessPiece
      * @return True if the mov is valid, false if not.
      */
     @Override
-    public boolean validMove(int row, int column, ChessPiece[][] board)
+    public boolean validMove(int row, int column, ChessBoard board)
     {
         /*if the move would not be valid for any chess pieces, it is not valid.
          * Else, go on with other checks.*/

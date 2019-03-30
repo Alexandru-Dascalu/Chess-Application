@@ -19,12 +19,12 @@ public class ChessBoard
 	public ChessBoard()
 	{
 		//add the non-pawn white pieces on the first row
-		chessBoard[0][0]=new ChessPiece(PieceType.rook,ChessPlayer.white,0,0);
-		chessBoard[0][7]=new ChessPiece(PieceType.rook,ChessPlayer.white,0,7);
-		chessBoard[0][1]=new ChessPiece(PieceType.knight,ChessPlayer.white,0,1);
-		chessBoard[0][6]=new ChessPiece(PieceType.knight,ChessPlayer.white,0,6);
-		chessBoard[0][2]=new ChessPiece(PieceType.bishop,ChessPlayer.white,0,2);
-		chessBoard[0][5]=new ChessPiece(PieceType.bishop,ChessPlayer.white,0,5);
+		chessBoard[0][0]=new Rook(PieceType.rook,ChessPlayer.white,0,0);
+		chessBoard[0][7]=new Rook(PieceType.rook,ChessPlayer.white,0,7);
+		chessBoard[0][1]=new Knight(ChessPlayer.white,0,1);
+		chessBoard[0][6]=new Knight(ChessPlayer.white,0,6);
+		chessBoard[0][2]=new Bishop(ChessPlayer.white,0,2);
+		chessBoard[0][5]=new Bishop(ChessPlayer.white,0,5);
 		chessBoard[0][3]=new ChessPiece(PieceType.queen,ChessPlayer.white,0,3);
 		chessBoard[0][4]=new ChessPiece(PieceType.king,ChessPlayer.white,0,4);
 		
@@ -34,17 +34,17 @@ public class ChessBoard
 		for(int i=0;i<8;i++)
 		{
 			whitePieces.add(chessBoard[0][i]);
-			chessBoard[1][i]=new ChessPiece(PieceType.pawn,ChessPlayer.white,1,i);
+			chessBoard[1][i]=new Pawn(ChessPlayer.white,1,i);
 			whitePieces.add(chessBoard[1][i]);
 		}
 		
 		//add non-pawn black pieces on row 7
 		chessBoard[7][0]= new ChessPiece(PieceType.rook,ChessPlayer.black,7,0);
 		chessBoard[7][7]= new ChessPiece(PieceType.rook,ChessPlayer.black,7,7);
-		chessBoard[7][1]=new ChessPiece(PieceType.knight,ChessPlayer.black,7,1);
-		chessBoard[7][6]=new ChessPiece(PieceType.knight,ChessPlayer.black,7,6);
-		chessBoard[7][2]=new ChessPiece(PieceType.bishop,ChessPlayer.black,7,2);
-		chessBoard[7][5]=new ChessPiece(PieceType.bishop,ChessPlayer.black,7,5);
+		chessBoard[7][1]=new Knight(ChessPlayer.black,7,1);
+		chessBoard[7][6]=new Knight(ChessPlayer.black,7,6);
+		chessBoard[7][2]=new Bishop(ChessPlayer.black,7,2);
+		chessBoard[7][5]=new Bishop(ChessPlayer.black,7,5);
 		chessBoard[7][3]=new ChessPiece(PieceType.queen,ChessPlayer.black,7,3);
 		chessBoard[7][4]=new ChessPiece(PieceType.king,ChessPlayer.black,7,4);
 		
@@ -52,7 +52,7 @@ public class ChessBoard
 		for(int i=0;i<8;i++)
 		{
 			blackPieces.add(chessBoard[7][i]);
-			chessBoard[6][i]=new ChessPiece(PieceType.pawn,ChessPlayer.black,6,i);
+			chessBoard[6][i]=new Pawn(ChessPlayer.black,6,i);
 			blackPieces.add(chessBoard[6][i]);
 		}
 	}
@@ -188,6 +188,58 @@ public class ChessBoard
 		}
 	}
 	
+	//method finds out if there are pieces between the position of this piece and another square 
+    //on the board, both situated diagonally.Private because it is not used in the ChessBoard class
+    public boolean clearDiagonalPath(ChessPiece piece, int finalRow, int finalColumn)
+    {
+        /*We have to figure out in what direction does each axis position change,
+         * if it increases or decreases.*/
+        int xDirection, yDirection;
+        
+        //the row and column where the piece we want to mve is currently at
+        int row = piece.getRow();
+        int column = piece.getColumn();
+        
+        //set vertical direction
+        if(row<finalRow)
+        {
+            xDirection=1;
+        }
+        else
+        {
+            xDirection=-1;
+        }
+        
+        //set horizontal direction
+        if(column<finalColumn)
+        {
+            yDirection=1;
+        }
+        else
+        {
+            yDirection=-1;
+        }
+        
+        //initialise the coordinates used in the loop, we begin from the next square after the start position
+        int currentRow = row + xDirection;
+        int currentColumn = column + yDirection;
+        
+        //we dont check the final position for a piece
+        while(currentRow!=finalRow && currentColumn!=finalColumn)
+        {
+            if(chessBoard[currentRow][currentColumn]!=null)
+            {
+                return false;
+            }
+            
+            currentRow+=xDirection;
+            currentColumn+=yDirection;
+        }
+        
+        //if it has not returned false by now, the path is clear
+        return true;
+    }
+    
 	/*Method for the castling move. It is a move that involves moving the king 2 squares towards a rook while
 	 * simultaneously moving the rook to the square over which the king passed.Method returns false if such
 	 * a move is not possible, or returns true after moving the pieces if the move is possbile. It takes in 

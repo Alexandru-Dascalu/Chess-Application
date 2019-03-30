@@ -95,7 +95,7 @@ public abstract class ChessPiece
 	 * @param board The chess board this chess piece is on.
 	 * @return True if the mov is valid, false if not.
 	 */
-	public boolean validMove(int row, int column,ChessPiece[][] board)
+	public boolean validMove(int row, int column, ChessBoard board)
 	{
 		//for all piece types, we cannot move it outside the chessBoard
 		if(row<0 || row>=ChessBoard.getSize() || column<0 || column>=ChessBoard.getSize())
@@ -108,9 +108,9 @@ public abstract class ChessPiece
 			return false;
 		}
 		//check if the move would capture another piece.
-		else if(board[row][column]!=null)
+		else if(board.getPiece(row, column)!=null)
 		{
-			if(player==board[row][column].getPlayer())
+			if(player == board.getPiece(row, column).getPlayer())
 			{
 				return false;
 			}
@@ -252,55 +252,6 @@ public abstract class ChessPiece
 			}
 		}
 		
-		return true;
-	}
-	
-	//method finds out if there are pieces between the position of this piece and another square 
-	//on the board, both situated diagonally.Private because it is not used in the ChessBoard class
-	protected boolean clearDiagonalPath(int finalRow, int finalColumn,
-			ChessPiece[][] board)
-	{
-		/*We have to figure out in what direction does each axis position change,
-		 * if it increases or decreases.*/
-		int xDirection, yDirection;
-		
-		//set vertical direction
-		if(this.row<finalRow)
-		{
-			xDirection=1;
-		}
-		else
-		{
-			xDirection=-1;
-		}
-		
-		//set horizontal direction
-		if(this.column<finalColumn)
-		{
-			yDirection=1;
-		}
-		else
-		{
-			yDirection=-1;
-		}
-		
-		//initialise the coordinates used in the loop, we begin from the next square after the start position
-		int currentRow=this.row+xDirection;
-		int currentColumn=this.column+yDirection;
-		
-		//we dont check the final position for a piece
-		while(currentRow!=finalRow && currentColumn!=finalColumn)
-		{
-			if(board[currentRow][currentColumn]!=null)
-			{
-				return false;
-			}
-			
-			currentRow+=xDirection;
-			currentColumn+=yDirection;
-		}
-		
-		//if it has not returned false by now, the path is clear
 		return true;
 	}
 	

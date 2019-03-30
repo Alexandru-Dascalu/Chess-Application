@@ -30,11 +30,16 @@ public class Bishop extends ChessPiece
      * @return True if the mov is valid, false if not.
      */
     @Override
-    public boolean validMove(int row, int column, ChessPiece[][] board)
+    public boolean validMove(int row, int column, ChessBoard board)
     {
-      //bishops can move diagonally on multiple squares, but cant jump over a piece
+        if(!super.validMove(row, column, board))
+        {
+            return false;
+        }
+        
+       //bishops can move diagonally on multiple squares, but cant jump over a piece
         if(Math.abs(this.column-column)==Math.abs(this.row-row) && 
-                clearDiagonalPath(row,column,board))
+                board.clearDiagonalPath(this, row, column))
         {
             return true;
         }
