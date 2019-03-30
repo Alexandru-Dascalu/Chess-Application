@@ -26,7 +26,7 @@ public class Pawn extends ChessPiece
      * @param row The starting row position of the chess piece.
      * @param column The starting column position of the chess piece.
      */
-    public Pawn(PieceType type, ChessPlayer player, int row, int column)
+    public Pawn(ChessPlayer player, int row, int column)
     {
         super(player, row, column);
         
