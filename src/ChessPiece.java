@@ -120,23 +120,7 @@ public abstract class ChessPiece
 		 * move, based on the overriding method*/
 		return true;
 	}
-	
-	//method determines whether a move is valid for a king
-	private boolean validKingMove(int row, int column, ChessPiece[][] board)
-	{
-		//a king can move one square diagonally, vertically or horizontally, which means at least
-		//one coordinate needs to change by one
-		if(Math.abs(this.row-row)<=1 && Math.abs(this.column-column)<=1)
-		{
-			return true;
-		}
-		//otherwise, its an invalid move
-		else
-		{
-			return false;
-		}
-	}
-	
+
 	///method determines whether a move is valid for a queen
 	private boolean validQueenMove (int row, int column, ChessPiece[][] board)
 	{
