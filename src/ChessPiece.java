@@ -162,21 +162,6 @@ public abstract class ChessPiece
 		}
 	}
 	
-	//method determines whether a move is valid for a bishop
-	private boolean validBishopMove(int row, int column, ChessPiece[][] board)
-	{
-		//bishops can move diagonally on multiple squares, but cant jump over a piece
-		if(Math.abs(this.column-column)==Math.abs(this.row-row) && 
-				clearDiagonalPath(row,column,board))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
 	/**Checks if this chess piece can be promoted to a more powerful one.
 	 * @return true if the chess piece can be promoted, false if not. Returns 
 	 * false unless overriden, since only pawns can be promoted.*/

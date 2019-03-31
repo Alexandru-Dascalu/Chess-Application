@@ -19,8 +19,8 @@ public class ChessBoard
 	public ChessBoard()
 	{
 		//add the non-pawn white pieces on the first row
-		chessBoard[0][0]=new Rook(PieceType.rook,ChessPlayer.white,0,0);
-		chessBoard[0][7]=new Rook(PieceType.rook,ChessPlayer.white,0,7);
+		chessBoard[0][0]=new Rook(ChessPlayer.white,0,0);
+		chessBoard[0][7]=new Rook(ChessPlayer.white,0,7);
 		chessBoard[0][1]=new Knight(ChessPlayer.white,0,1);
 		chessBoard[0][6]=new Knight(ChessPlayer.white,0,6);
 		chessBoard[0][2]=new Bishop(ChessPlayer.white,0,2);
@@ -39,8 +39,8 @@ public class ChessBoard
 		}
 		
 		//add non-pawn black pieces on row 7
-		chessBoard[7][0]= new ChessPiece(PieceType.rook,ChessPlayer.black,7,0);
-		chessBoard[7][7]= new ChessPiece(PieceType.rook,ChessPlayer.black,7,7);
+		chessBoard[7][0]= new Rook(ChessPlayer.black,7,0);
+		chessBoard[7][7]= new Rook(ChessPlayer.black,7,7);
 		chessBoard[7][1]=new Knight(ChessPlayer.black,7,1);
 		chessBoard[7][6]=new Knight(ChessPlayer.black,7,6);
 		chessBoard[7][2]=new Bishop(ChessPlayer.black,7,2);
