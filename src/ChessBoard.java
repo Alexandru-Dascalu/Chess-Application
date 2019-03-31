@@ -25,7 +25,7 @@ public class ChessBoard
 		chessBoard[0][6]=new Knight(ChessPlayer.white,0,6);
 		chessBoard[0][2]=new Bishop(ChessPlayer.white,0,2);
 		chessBoard[0][5]=new Bishop(ChessPlayer.white,0,5);
-		chessBoard[0][3]=new ChessPiece(PieceType.queen,ChessPlayer.white,0,3);
+		chessBoard[0][3]=new Queen(ChessPlayer.white,0,3);
 		chessBoard[0][4]=new King(ChessPlayer.white,0,4);
 		
 		/*this for loop adds the white pieces on the first row to the arrayList, creates
@@ -45,7 +45,7 @@ public class ChessBoard
 		chessBoard[7][6]=new Knight(ChessPlayer.black,7,6);
 		chessBoard[7][2]=new Bishop(ChessPlayer.black,7,2);
 		chessBoard[7][5]=new Bishop(ChessPlayer.black,7,5);
-		chessBoard[7][3]=new ChessPiece(PieceType.queen,ChessPlayer.black,7,3);
+		chessBoard[7][3]=new Queen(ChessPlayer.black,7,3);
 		chessBoard[7][4]=new King(ChessPlayer.black,7,4);
 		
 		//add pawn black pieces to the list, create black pawns and add them to the list
