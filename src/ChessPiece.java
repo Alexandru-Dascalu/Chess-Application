@@ -121,31 +121,6 @@ public abstract class ChessPiece
 		return true;
 	}
 
-	///method determines whether a move is valid for a queen
-	private boolean validQueenMove (int row, int column, ChessPiece[][] board)
-	{
-		//a queen can move horizontally however many spaces, but it cant jump over a piece
-		if(this.row==row && clearLiniarPath(row,column,board))
-		{
-			return true;
-		}
-		// a queen can move vertically  however many spaces, but it cant jump over a piece
-		else if(this.column==column && clearLiniarPath(row,column,board))
-		{
-			return true;
-		}
-		// a queen can move diagonally however many spaces, but cant jump over another piece
-		else if(Math.abs(this.row-row)==Math.abs(this.column-column) && 
-				clearDiagonalPath(row,column,board))
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
-	}
-	
 	/**Checks if this chess piece can be promoted to a more powerful one.
 	 * @return true if the chess piece can be promoted, false if not. Returns 
 	 * false unless overriden, since only pawns can be promoted.*/
