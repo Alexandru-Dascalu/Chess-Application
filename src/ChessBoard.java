@@ -240,6 +240,70 @@ public class ChessBoard
         return true;
     }
     
+    /*method finds out whether there are any pieces between 2 positions that are either on
+     *  the same row or column needed for queen and bishop moves.Public because it is also
+     *   used in the method for the castling move in the ChessBoard class.*/
+    public boolean clearLiniarPath(ChessPiece piece, int finalRow, int finalColumn)
+    {
+        //the row and column indexes of the current location of the piece
+        int pieceRow = piece.getRow();
+        int pieceColumn = piece.getColumn();
+        
+        /* we find out which position has smaller coordinates*/
+        int startPoint;
+        int endPoint;
+        
+        //we find out if the line is vertical or horizontal
+        if(pieceRow == finalRow && pieceColumn != finalColumn)
+        {
+            if(pieceColumn > finalColumn)
+            {
+                startPoint = finalColumn;
+                endPoint= pieceColumn;
+            }
+            else
+            {
+                startPoint = pieceColumn;
+                endPoint = finalColumn;
+            }
+            
+            /*we start from the square after the initial position, and dont check the final square,
+             * since enemy pieces are captured by moving on their location*/
+            for(int i=startPoint+1;i<endPoint;i++)
+            {
+                //if we find just one piece on the way, the path is not clear
+                if(chessBoard[finalRow][i]!=null)
+                {
+                    return false;
+                }
+            }
+        }
+        else if(pieceRow != finalRow && pieceColumn==finalColumn)
+        {
+            if(pieceRow>finalRow)
+            {
+                startPoint = finalRow;
+                endPoint = pieceRow;
+            }
+            else
+            {
+                startPoint = pieceRow;
+                endPoint = finalRow;
+            }
+            
+            //since its a horizontal line, the for loop loops through different row, not columns
+            for(int i=startPoint+1;i<endPoint;i++)
+            {
+                if(chessBoard[i][finalColumn]!=null)
+                {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
 	/*Method for the castling move. It is a move that involves moving the king 2 squares towards a rook while
 	 * simultaneously moving the rook to the square over which the king passed.Method returns false if such
 	 * a move is not possible, or returns true after moving the pieces if the move is possbile. It takes in 

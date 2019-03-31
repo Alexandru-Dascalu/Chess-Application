@@ -196,65 +196,6 @@ public abstract class ChessPiece
 		}
 	}
 	
-	/*method finds out whether there are any pieces between 2 positions that are either on
-	 *  the same row or column needed for queen and bishop moves.Public because it is also
-	 *   used in the method for the castling move in the ChessBoard class.*/
-	public boolean clearLiniarPath(int finalRow, int finalColumn,ChessPiece[][] board)
-	{
-		//so that we dont repeat a for loop, we find out which position has smaller coordinates
-		int startPoint, endPoint;
-		
-		//we find out if the line is vertical or horizontal
-		if(this.row==finalRow && this.column!=finalColumn)
-		{
-			if(this.column>finalColumn)
-			{
-				startPoint=finalColumn;
-				endPoint=this.column;
-			}
-			else
-			{
-				startPoint=this.column;
-				endPoint=finalColumn;
-			}
-			
-			/*we start from the square after the initial position, and dont check the final square,
-			 * since enemy pieces are captured by moving on their location*/
-			for(int i=startPoint+1;i<endPoint;i++)
-			{
-				//if we find just one piece on the way, the path is not clear
-				if(board[finalRow][i]!=null)
-				{
-					return false;
-				}
-			}
-		}
-		else if(this.row!=finalRow && this.column==finalColumn)
-		{
-			if(this.row>finalRow)
-			{
-				startPoint=finalRow;
-				endPoint=this.row;
-			}
-			else
-			{
-				startPoint=this.row;
-				endPoint=finalRow;
-			}
-			
-			//since its a horizontal line, the for loop loops through different row, not columns
-			for(int i=startPoint+1;i<endPoint;i++)
-			{
-				if(board[i][finalColumn]!=null)
-				{
-					return false;
-				}
-			}
-		}
-		
-		return true;
-	}
-	
 	/**Checks if this chess piece can be promoted to a more powerful one.
 	 * @return true if the chess piece can be promoted, false if not. Returns 
 	 * false unless overriden, since only pawns can be promoted.*/
