@@ -162,25 +162,6 @@ public abstract class ChessPiece
 		}
 	}
 	
-	//method determines whether a move is valid for a rook
-	private boolean validRookMove (int row, int column, ChessPiece[][] board)
-	{
-		//rooks can move horizontally and cant jump over a piece
-		if(this.row==row && clearLiniarPath(row,column,board))
-		{
-			return true;
-		}
-		//rooks can move vertically and cant jump over a piece
-		else if(this.column==column && clearLiniarPath(row,column,board))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
 	//method determines whether a move is valid for a bishop
 	private boolean validBishopMove(int row, int column, ChessPiece[][] board)
 	{
