@@ -1,6 +1,6 @@
 /**
  * Class models a king chess piece object. A king can move in any direction, but
- * only one square at a time, however many spaces, and can not jump over other pieces.
+ * only one square at a time, and can not jump over other pieces.
  * @author Alexandru Dascalu
  * @version 1.0
  */
@@ -23,7 +23,7 @@ public class King extends ChessPiece
      * Check if a move of this piece to the square at the given coordinates of 
      * the given chess board is valid or not, according to chess rules and 
      * depending on the type of the chess piece. This method makes sure a 
-     * king can only move one space, in any direction.
+     * king can only move one space, linearly or diagonally.
      * @param row The starting row of this piece.
      * @param column The starting column of this piece.
      * @param board The chess board this chess piece is on.
