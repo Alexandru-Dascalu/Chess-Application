@@ -120,9 +120,11 @@ public class ChessBoard
 				chessBoard[piece.getRow()][column]=null;
 				((Pawn)piece).setMoved2Spaces(true);
 			}
-			else if(piece.getType()==PieceType.pawn)
+			/*set the has moved 2 spaces flag to false in case the moved piece 
+			 * is a pawn*/
+			else if(piece.getType() == PieceType.pawn)
 			{
-				piece.setMoved2Spaces(false);
+				((Pawn)piece).setMoved2Spaces(false);
 			}
 			//set the original square of the piece to be empty
 			chessBoard[piece.getRow()][piece.getColumn()]=null;
