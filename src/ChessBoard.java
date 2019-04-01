@@ -81,8 +81,14 @@ public class ChessBoard
 		return blackPieces;
 	}
 	
-	//method moves a piece on the chess board to the given coordinates if the 
-	//specified move is valid
+	/**
+     * Moves a piece on the board to the given coordinates. It ensures the move
+     * is valid, that the appropriate enemy pieces are removed, and that this 
+     * piece is moved and any piece attributes are changed to reflect the move.
+     * @param piece The piece to be moved
+     * @param endRow The row of the square where the piece will be moved.
+     * @param endColumn The column of the square where the piece will be moved.
+     */
 	public boolean movePiece(ChessPiece piece, int row, int column)
 	{
 		if(piece.validMove(row, column, this))
@@ -145,9 +151,14 @@ public class ChessBoard
 		}
 	}
 	
-	/*method for moving a piece on the board in the castling move, only used in the 
-	 * castling method so its private.Castling would not normally be valid, so we dont
-	 * call the valid move method of the piece.*/
+	/**
+	 * Moves a piece on the board in the castling move, only used in the 
+     * castling method so its private. Castling would not normally be valid, so we don't
+     * call the valid move method of the piece.
+	 * @param piece The piece to be moved
+     * @param endRow The row of the square where the piece will be moved.
+     * @param endColumn The column of the square where the piece will be moved.
+	 */
 	private void movePieceNoValidation(ChessPiece piece, int row, int column)
 	{
 		//set the original square of the piece to be empty
