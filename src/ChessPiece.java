@@ -25,7 +25,14 @@ public abstract class ChessPiece
 	 * has moved at least once.*/
 	protected boolean hasMoved;
 	
-	/*Constructor has parameters that specify the piece's type, team, and position*/
+	/**
+	 * Makes a new Chess Piece object of the given color and that starts at
+	 * the given position. The created piece has the hasMoved flag set to 
+	 * false, and the piece type is null.
+	 * @param player The colour of the player this piece belongs to.
+	 * @param row The starting row of the piece.
+	 * @param column The starting column of the piece.
+	 */
 	public ChessPiece(ChessPlayer player, int row, int column)
 	{
 		//set team related variables
@@ -35,48 +42,82 @@ public abstract class ChessPiece
 		this.row=row;
 		this.column=column;
 		
+		/*set it to null since we can not set it now, it will be set later in
+		 * the subclass constructor*/
 		pieceType = null;
+		
 		//the piece has not moved at all
 		hasMoved=false;
 	}
 	
-	//method sets the position of a piece to a new one
-	public void setPosition(int row, int column)
+	/**
+	 * Sets the position of a piece to a new one.
+	 * @param row The new row of the piece.
+	 * @param column The new column of the piece.
+	 * @throws IllegalArgumentException Thrown if the at least one value is 
+	 * either negative or larger than the size of the board.
+	 */
+	public void setPosition(int row, int column) throws IllegalArgumentException
 	{
-		if(row>=0 && row<ChessBoard.getSize() && column>=0 && column<ChessBoard.getSize())
+		if(row >= 0 && row < ChessBoard.getSize() && column >= 0 && 
+		        column < ChessBoard.getSize())
 		{
 			this.row=row;
 			this.column=column;
 		}
+		else
+		{
+		    throw new IllegalArgumentException("The given coordinates are" +
+		        " outside the chessboard!");
+		}
 	}
 	
-	//method sets hasMoved to true, needed in the castling method in the ChessBoard class 
+	/**Sets a flag that tells you if the piece has ever moved to true.*/
 	public void setHasMoved()
 	{
-		hasMoved=true;
+		hasMoved = true;
 	}
 	
-	//geters for all the variables
+	/**
+	 * Gets the current row where the piece is located.
+	 * @return The row of the piece.
+	 */
 	public int getRow()
 	{
 		return row;
 	}
 	
+	/**
+     * Gets the current column where the piece is located.
+     * @return The column of the piece.
+     */
 	public int getColumn()
 	{
 		return column;
 	}
 	
+	/**
+	 * Gets the player colour of the player this piece belongs to.
+	 * @return the type of the player that owns this chess piece.
+	 */
 	public ChessPlayer getPlayer()
 	{
 		return player;
 	}
 	
+	/**
+	 * Gets the type of the chess piece.
+	 * @return the type of the chess piece.
+	 */
 	public PieceType getType()
 	{
 		return pieceType;
 	}
 	
+	/**
+	 * Tells you if the chess piece has ever been moved in the current game.
+	 * @return True if the chess piece has ever been moved in the current game.
+	 */
 	public boolean hasMoved()
 	{
 		return hasMoved;
@@ -123,7 +164,7 @@ public abstract class ChessPiece
 
 	/**Checks if this chess piece can be promoted to a more powerful one.
 	 * @return true if the chess piece can be promoted, false if not. Returns 
-	 * false unless overriden, since only pawns can be promoted.*/
+	 * false unless overridden, since only pawns can be promoted.*/
 	public boolean canBePromoted()
 	{
 		return false;
