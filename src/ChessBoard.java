@@ -126,6 +126,7 @@ public class ChessBoard
 			{
 				((Pawn)piece).setMoved2Spaces(false);
 			}
+			
 			//set the original square of the piece to be empty
 			chessBoard[piece.getRow()][piece.getColumn()]=null;
 			
@@ -160,6 +161,14 @@ public class ChessBoard
 		chessBoard[row][column]=piece;
 	}
 	
+	/**
+	 * Checks if moving the given piece to the given coordinates would be an 
+	 * en passant move.
+	 * @param piece The piece to be moved
+	 * @param endRow The row of the square where the piece will be moved.
+	 * @param endColumn The column of the square where the piece will be moved.
+	 * @return True if the move is an en passant move, false if not.
+	 */
 	private boolean isEnPassantMove(ChessPiece piece, int endRow, int endColumn)
 	{
 	    /*It can be an en passant move if the chess piece being moved is a pawn.*/
@@ -205,8 +214,15 @@ public class ChessBoard
 	    return false;
 	}
 	
-	//method for promoting a pawn at a certain square to a new piece of another type
-	//returns false if that is not possible and does nothing instead
+	/**
+	 * Promotes a pawn at the given coordinates on the board to the given
+	 *  piece type.
+	 * @param type The type of the new chess piece you want.
+	 * @param row The row of the pawn you want to promote.
+	 * @param column The column of the pawn you want to promote.
+	 * @return True if the pawn was promoted, false if the piece at the given
+	 * coordinates can not be promoted (nothing happens in this case).
+	 */
 	public boolean promotePawn(PieceType type, int row, int column)
 	{
 		//canBePromoted checks if the piece at those coordinates is a pawn on the row 
@@ -221,8 +237,23 @@ public class ChessBoard
 			//remove the old piece from the correct list of pieces
 			getAppropiateList(player).remove(chessBoard[row][column]);
 			
-			//put the new piece in the specified square
-			chessBoard[row][column]=new ChessPiece(type,player, row, column);
+			/*Make a new chess piece of the right type and put it on the board.*/
+			if(type == PieceType.bishop)
+			{
+			    chessBoard[row][column] = new Bishop(player, row, column);
+			}
+			else if(type == PieceType.knight)
+			{
+			    chessBoard[row][column] = new Knight(player, row, column);
+			}
+			else if(type == PieceType.rook)
+            {
+                chessBoard[row][column] = new Rook(player, row, column);
+            }
+			else if(type == PieceType.queen)
+            {
+                chessBoard[row][column] = new Queen(player, row, column);
+            }
 			
 			//add the new piece to the proper list
 			getAppropiateList(player).add(chessBoard[row][column]);
