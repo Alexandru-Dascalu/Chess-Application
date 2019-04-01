@@ -284,7 +284,8 @@ public class ChessBoard
     {
         /*We have to figure out in what direction does each axis position change,
          * if it increases or decreases.*/
-        int xDirection, yDirection;
+        int xDirection;
+        int yDirection;
         
         //the row and column where the piece we want to mve is currently at
         int row = piece.getRow();
@@ -331,8 +332,8 @@ public class ChessBoard
     }
     
     /*method finds out whether there are any pieces between 2 positions that are either on
-     *  the same row or column needed for queen and bishop moves.Public because it is also
-     *   used in the method for the castling move in the ChessBoard class.*/
+     * the same row or column needed for queen and bishop moves.Public because it is also
+     * used in the method for the castling move in the ChessBoard class.*/
     public boolean clearLiniarPath(ChessPiece piece, int finalRow, int finalColumn)
     {
         //the row and column indexes of the current location of the piece
