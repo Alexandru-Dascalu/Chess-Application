@@ -520,11 +520,11 @@ public class ChessBoard
 		ArrayList<ChessPiece> pieceList;
 		if(player == ChessPlayer.white)
 		{
-		    pieceList = whitePieces;
+		    pieceList = blackPieces;
 		}
 		else
 		{
-		    pieceList = blackPieces;
+		    pieceList = whitePieces;
 		}
 		
         /*
