@@ -517,51 +517,50 @@ public class ChessBoard
 		ChessPiece king=findKing(player);
 		chessBoard[king.getRow()][king.getColumn()]=null;
 		
-		/*we go through all the pieces of the enemy and see if there is one 
-		 *which could move to the specified square, if we find one, it is in check and we return true.
-		 *Before returning, we put the king back on the chessboard.*/
-		if(player==ChessPlayer.white)
-		{	
-			for (ChessPiece elem: blackPieces)
-			{
-				if(elem.getType()!=PieceType.pawn && elem.validMove(row, column,chessBoard))
-				{
-					chessBoard[king.getRow()][king.getColumn()]=king;
-					return true;
-				}
-				/*pawns capture pieces only on the diagonal. The validPawnMove method also checks that 
-				 * the specified square is occupied.Since isInCheck also checks if empty squares would 
-				 * be under check, we treat pawns separately, and we check if the pawn could move on the
-				 * diagonal forward to the square we are checking.*/
-				else if(elem.getType()==PieceType.pawn)
-				{
-					if(elem.getRow()+elem.getDirection()==row && Math.abs(elem.getColumn()-column)==1)
-					{
-						chessBoard[king.getRow()][king.getColumn()]=king;
-						return true;
-					}
-				}
-			}
+		ArrayList<ChessPiece> pieceList;
+		if(player == ChessPlayer.white)
+		{
+		    pieceList = whitePieces;
 		}
 		else
 		{
-			for (ChessPiece elem: whitePieces)
-			{
-				if(elem.getType()!=PieceType.pawn && elem.validMove(row, column,chessBoard))
-				{
-					chessBoard[king.getRow()][king.getColumn()]=king;
-					return true;
-				}
-				else if(elem.getType()==PieceType.pawn)
-				{
-					if(elem.getRow()+elem.getDirection()==row && Math.abs(elem.getColumn()-column)==1)
-					{
-						chessBoard[king.getRow()][king.getColumn()]=king;
-						return true;
-					}
-				}
-			}
+		    pieceList = blackPieces;
 		}
+		
+        /*
+         * we go through all the pieces of the enemy and see if there is one
+         * which could move to the specified square, if we find one, it is in
+         * check and we return true. Before returning, we put the king back on
+         * the chessboard.
+         */
+        for (ChessPiece piece : pieceList) 
+        {
+            if (piece.getType() != PieceType.pawn &&
+                piece.validMove(row, column, this)) 
+            {
+                chessBoard[king.getRow()][king.getColumn()] = king;
+                return true;
+            }
+            /*
+             * pawns capture pieces only on the diagonal. The validPawnMove
+             * method also checks that the specified square is occupied. Since
+             * isInCheck also checks if empty squares would be under check, we
+             * treat pawns separately, and we check if the pawn could move on
+             * the diagonal forward to the square we are checking.
+             */
+            else if (piece.getType() == PieceType.pawn) 
+            {
+                Pawn pawn = (Pawn) piece;
+
+                if (piece.getRow() + pawn.getDirection() == row &&
+                    Math.abs(piece.getColumn() - column) == 1) 
+                {
+                    chessBoard[king.getRow()][king.getColumn()] = king;
+                    return true;
+                }
+            }
+        }
+		
 		//if no enemy piece can move to the square, it is not in check
 		chessBoard[king.getRow()][king.getColumn()]=king;
 		return false;
