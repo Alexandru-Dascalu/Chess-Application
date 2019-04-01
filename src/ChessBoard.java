@@ -106,18 +106,19 @@ public class ChessBoard
 			{
 				getAppropiateList(chessBoard[row][column].getPlayer()).remove(chessBoard[row][column]);
 			}
-			/*in the en passant movement, the piece that is captured is not on the square you move 
-			 * your piece to. So, if the square you move to is empty, we check if you are doing an
-			 * en passant move, we remove the captured pawn from the correct list and remove it 
+			/*in the en passant movement, the piece that is captured is not on 
+			 * the square you move your piece to. So, we remove the captured 
+			 * pawn at the correct square from the correct list and remove it 
 			 * from the board*/
-			else if(piece.getType()==PieceType.pawn && piece.getRow()+piece.getDirection()==row &&
-					Math.abs(column-piece.getColumn())==1 && chessBoard[piece.getRow()][column]!=null
-					&& chessBoard[piece.getRow()][column].hasMoved2Spaces())
+			else if(isEnPassantMove(piece, row, column))
 			{
-				getAppropiateList(chessBoard[piece.getRow()][column].getPlayer()).remove(chessBoard[piece.getRow()][column]);
+			    /*Get the pawn that needs to be removed after an en passant
+			     * move and remove it.*/
+			    ChessPiece removedPawn = chessBoard[piece.getRow()][column];
+				getAppropiateList(removedPawn.getPlayer()).remove(removedPawn);
 				
 				chessBoard[piece.getRow()][column]=null;
-				piece.setMoved2Spaces(true);
+				((Pawn)piece).setMoved2Spaces(true);
 			}
 			else if(piece.getType()==PieceType.pawn)
 			{
@@ -155,6 +156,51 @@ public class ChessBoard
 		
 		//set the piece to its new place on the board
 		chessBoard[row][column]=piece;
+	}
+	
+	private boolean isEnPassantMove(ChessPiece piece, int endRow, int endColumn)
+	{
+	    /*It can be an en passant move if the chess piece being moved is a pawn.*/
+	    if(piece.getType() != PieceType.pawn)
+	    {
+	        return false;
+	    }
+	    
+	    //we know it is a pawn, so we cast it to use pawn specific methods
+	    Pawn movedPawn = (Pawn)piece;
+	    
+	    /*says if the pawn is being moved forward diagonally*/
+	    boolean diagonalMove = movedPawn.getRow() + movedPawn.getDirection() == endRow 
+	            && Math.abs(endColumn-piece.getColumn())==1;
+	    
+	    /*It can be an en passant move if it moves forward diagonally and if 
+	     * next to the current position of the pawn there is another piece.*/
+	    if(diagonalMove && chessBoard[piece.getRow()][endColumn]!=null)
+	    {
+	        //the piece currently next to moved piece, that may be an enemy pawn.
+	        ChessPiece otherPiece = chessBoard[movedPawn.getRow()][endColumn];
+	        
+	        /*says if the piece next to the moved piece is an enemy pawn*/
+	        boolean isEnemyPawn = otherPiece.getType() == PieceType.pawn 
+	                && otherPiece.getPlayer() != movedPawn.getPlayer();
+	        
+	        /*The move can be an en passant move if the piece next the moved 
+	         * piece is an enemy pawn.*/
+	        if(isEnemyPawn)
+	        {
+	            Pawn enemyPawn = (Pawn)otherPiece;
+	            
+	            /*Finally, it is an en passant move if the enemy pawn has 
+	             * moved 2 spaces during its last move.*/
+	            if(enemyPawn.hasMoved2Spaces())
+	            {
+	                return true;
+	            }
+	        }
+	    }
+	    
+	    /*If any condition has failed so far, it is not an en passant move.*/
+	    return false;
 	}
 	
 	//method for promoting a pawn at a certain square to a new piece of another type
