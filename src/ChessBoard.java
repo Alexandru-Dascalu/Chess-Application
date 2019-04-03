@@ -124,15 +124,13 @@ public class ChessBoard
 				getAppropiateList(removedPawn.getPlayer()).remove(removedPawn);
 				
 				chessBoard[piece.getRow()][column]=null;
-				((Pawn)piece).setMoved2Spaces(true);
 			}
 			
 			//set the original square of the piece to be empty
 			chessBoard[piece.getRow()][piece.getColumn()]=null;
 			
-			//update the position variables of the piece and set hasMoved to true
-			piece.setPosition(row,column);
-			piece.setHasMoved();
+			//make necessary changes to the piece to reflect the move
+			piece.move(row, column);
 			
 			//set the piece to its new place on the board, if 
 			//there was an enemy piece on that square, we capture it by replacing it
@@ -158,9 +156,8 @@ public class ChessBoard
 		//set the original square of the piece to be empty
 		chessBoard[piece.getRow()][piece.getColumn()]=null;
 		
-		//update the position variables of the piece and set hasMoved to true
-		piece.setPosition(row,column);
-		piece.setHasMoved();
+		//make necessary changes to the piece to reflect the move
+		piece.move(row,column);
 		
 		//set the piece to its new place on the board
 		chessBoard[row][column]=piece;
@@ -452,18 +449,14 @@ public class ChessBoard
 		//if it as not returned false by know, the move can be done
 		else
 		{
-			
 			/*Depending on the column of the rook being moved, the king and rook 
-			 * land on different squares in each case. After the move is made, 
-			 * we set the hasMoved boolean to true and the method returns true*/
+			 * land on different squares in each case.*/
 			if(rookColumn==0)
 			{
 				/*move king 2 squares toward the rook and the rook on the 
 				 *square the king jumped over*/
 				movePieceNoValidation(chessBoard[rookRow][rookColumn],rookRow,3);
-				chessBoard[rookRow][3].setHasMoved();
 				movePieceNoValidation(chessBoard[rookRow][4],rookRow,2);
-				chessBoard[rookRow][2].setHasMoved();
 				return true;
 			}
 			/*at this point, we know the rook has not moved yet so the rookColumn
@@ -471,9 +464,7 @@ public class ChessBoard
 			else
 			{
 				movePieceNoValidation(chessBoard[rookRow][rookColumn],rookRow,5);
-				chessBoard[rookRow][5].setHasMoved();
 				movePieceNoValidation(chessBoard[rookRow][4],rookRow,6);
-				chessBoard[rookRow][6].setHasMoved();
 				return true;
 			}
 		}

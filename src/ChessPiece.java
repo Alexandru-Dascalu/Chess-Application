@@ -51,13 +51,28 @@ public abstract class ChessPiece
 	}
 	
 	/**
+	 * Does all the necessary changes to this piece's fields to reflect the 
+	 * move on the chess board. It changes the row and column of the piece and
+	 * sets the hasMoved flag to true.
+	 * @param row The new row of the piece.
+     * @param column The new column of the piece.
+     * @throws IllegalArgumentException Thrown if the at least one value is 
+     * either negative or larger than the size of the board.
+	 */
+	public void move(int row, int column) throws IllegalArgumentException
+	{
+	    setPosition(row, column);
+	    hasMoved = true;
+	}
+	
+	/**
 	 * Sets the position of a piece to a new one.
 	 * @param row The new row of the piece.
 	 * @param column The new column of the piece.
 	 * @throws IllegalArgumentException Thrown if the at least one value is 
 	 * either negative or larger than the size of the board.
 	 */
-	public void setPosition(int row, int column) throws IllegalArgumentException
+	private void setPosition(int row, int column) throws IllegalArgumentException
 	{
 		if(row >= 0 && row < ChessBoard.getSize() && column >= 0 && 
 		        column < ChessBoard.getSize())
@@ -70,12 +85,6 @@ public abstract class ChessPiece
 		    throw new IllegalArgumentException("The given coordinates are" +
 		        " outside the chessboard!");
 		}
-	}
-	
-	/**Sets a flag that tells you if the piece has ever moved to true.*/
-	public void setHasMoved()
-	{
-		hasMoved = true;
 	}
 	
 	/**

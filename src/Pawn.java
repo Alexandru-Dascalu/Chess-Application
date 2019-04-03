@@ -71,12 +71,40 @@ public class Pawn extends ChessPiece
         return moved2Spaces;
     }
     
-    /**Sets the has moved flag to a new value.
-     * @param move the new value of whether or not this pawn has moved 2 spaces 
-     * in the previous move.*/
-    public void setMoved2Spaces(boolean move)
+    /**
+     * Does all the necessary changes to this piece's fields to reflect the 
+     * move on the chess board. It changes the row and column of the piece and
+     * sets the hasMoved flag to true, and sets the moved2Spaces flag to the 
+     * right value.
+     * @param newRow The new row of the piece.
+     * @param newColumn The new column of the piece.
+     * @throws IllegalArgumentException Thrown if the at least one value is 
+     * either negative or larger than the size of the board.
+     */
+    @Override
+    public void move(int newRow, int newColumn) throws IllegalArgumentException
     {
-        moved2Spaces=move;
+        /*moved2Spaces should be true only after a move before which the pawn
+         *  never moved. */
+        if(!hasMoved)
+        {
+            /*moved2Spaces should be true only after a the pawn moves 2 spaces
+             * ahead.*/
+            if((row + 2*direction == newRow) && (column == newColumn))
+            {
+                moved2Spaces = true;
+            }
+            else
+            {
+                moved2Spaces = false;
+            }
+        }
+        else
+        {
+            moved2Spaces = false;
+        }
+        
+        super.move(row, column);
     }
     
     /**
@@ -104,7 +132,6 @@ public class Pawn extends ChessPiece
         if(this.row+direction==row && column==this.column &&
                 board.getPiece(row, column)==null)
         {
-            moved2Spaces=false;
             return true;
         }
         //move forward 2 spaces if its the first move
@@ -112,14 +139,12 @@ public class Pawn extends ChessPiece
         else if (this.row+2*direction==row && column==this.column && !hasMoved && 
                 board.getPiece(row, column)==null && board.getPiece(row - 1, column)==null)
         {
-            moved2Spaces=true;
             return true;
         }
         //capture a piece one space on the diagonal
         else if (this.row+direction==row && Math.abs(column-this.column)==1 && 
                 board.getPiece(row, column)!=null )
         {
-            moved2Spaces=false;
             return true;
         }
         /*en Passant movement, the space one square on the diagonal needs to be
@@ -143,7 +168,6 @@ public class Pawn extends ChessPiece
                  * have just moved 2 spaces.*/
                 if(enemyPawn.hasMoved2Spaces() && player!=enemyPawn.getPlayer())
                 {
-                    moved2Spaces=false;
                     return true;
                 }
                 //if next to your pawn there is a pawn that has just moved 2 spaces of 
