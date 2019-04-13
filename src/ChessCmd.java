@@ -1,5 +1,6 @@
 import java.util.Scanner;
-public class Chess 
+
+public class ChessCmd 
 {
 	public static void main(String[] args)
 	{
