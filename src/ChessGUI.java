@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class ChessGUI extends Application
@@ -26,7 +27,8 @@ public class ChessGUI extends Application
     {
         BorderPane mainPane = new BorderPane();
         
-        Text currentPlayer = new Text();
+        Text currentPlayer = new Text("It is the turn of the white player!");
+        currentPlayer.setTextAlignment(TextAlignment.JUSTIFY);
         
         Button quitBtn = new Button("Quit");
         Button helpBtn = new Button("Help");
@@ -35,9 +37,10 @@ public class ChessGUI extends Application
         
         mainPane.setCenter(getChessBoardPane(mainPane));
         mainPane.setTop(currentPlayer);
+        BorderPane.setAlignment(currentPlayer, Pos.CENTER);
         mainPane.setBottom(buttonMenu);
         
-        Scene scene = new Scene(mainPane, 1920, 1080);
+        Scene scene = new Scene(mainPane, 1300, 900);
         stage.setScene(scene);
         stage.show();
     }
@@ -102,8 +105,8 @@ public class ChessGUI extends Application
     private ImageView getSquareImage(Image image)
     {
         ImageView newSquare = new ImageView(image);
-        newSquare.setFitHeight(125);
-        newSquare.setFitWidth(125);
+        newSquare.setFitHeight(100);
+        newSquare.setFitWidth(100);
         
         return newSquare;
     }
