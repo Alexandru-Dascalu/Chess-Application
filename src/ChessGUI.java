@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -35,14 +36,19 @@ public class ChessGUI extends Application
         HBox buttonMenu = new HBox();
         buttonMenu.getChildren().addAll(helpBtn, quitBtn);
         
-        mainPane.setCenter(getChessBoardPane(mainPane));
+        GridPane chessBoardPane = getChessBoardPane(mainPane);
+        mainPane.setCenter(chessBoardPane);
         mainPane.setTop(currentPlayer);
         BorderPane.setAlignment(currentPlayer, Pos.CENTER);
+        BorderPane.setAlignment(chessBoardPane, Pos.CENTER);
         mainPane.setBottom(buttonMenu);
         
-        Scene scene = new Scene(mainPane, 1300, 900);
+        Scene scene = new Scene(new Group(mainPane), 1300, 900);
         stage.setScene(scene);
         stage.show();
+        
+        mainPane.prefWidthProperty().bind(scene.widthProperty());
+        mainPane.prefHeightProperty().bind(scene.heightProperty());
     }
     
     private GridPane getChessBoardPane(BorderPane pane)
