@@ -34,14 +34,18 @@ public class ChessGUI extends Application
         Button quitBtn = new Button("Quit");
         Button helpBtn = new Button("Help");
         HBox buttonMenu = new HBox();
+        //buttonMenu.setSpacing(25);
         buttonMenu.getChildren().addAll(helpBtn, quitBtn);
+        buttonMenu.setAlignment(Pos.CENTER);
+        buttonMenu.setPadding(new Insets(10, 20, 20, 20));
         
         GridPane chessBoardPane = getChessBoardPane(mainPane);
         mainPane.setCenter(chessBoardPane);
-        mainPane.setTop(currentPlayer);
+        mainPane.setTop(currentPlayer);       
+        mainPane.setBottom(buttonMenu);
+        
         BorderPane.setAlignment(currentPlayer, Pos.CENTER);
         BorderPane.setAlignment(chessBoardPane, Pos.CENTER);
-        mainPane.setBottom(buttonMenu);
         
         Scene scene = new Scene(new Group(mainPane), 1300, 900);
         stage.setScene(scene);
