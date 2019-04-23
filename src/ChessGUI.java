@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -12,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -34,16 +37,18 @@ public class ChessGUI extends Application
         Button quitBtn = new Button("Quit");
         Button helpBtn = new Button("Help");
         HBox buttonMenu = new HBox();
-        //buttonMenu.setSpacing(25);
-        buttonMenu.getChildren().addAll(helpBtn, quitBtn);
-        buttonMenu.setAlignment(Pos.CENTER);
-        buttonMenu.setPadding(new Insets(10, 20, 20, 20));
+        
+        buttonMenu.setSpacing(205);
+        buttonMenu.getChildren().addAll(createSpacer(), helpBtn, createSpacer(), quitBtn, createSpacer());
+        buttonMenu.setAlignment(Pos.TOP_CENTER);
+        buttonMenu.setPadding(new Insets(5, 20, 20, 20));
         
         GridPane chessBoardPane = getChessBoardPane(mainPane);
         mainPane.setCenter(chessBoardPane);
         mainPane.setTop(currentPlayer);       
         mainPane.setBottom(buttonMenu);
         
+        BorderPane.setAlignment(buttonMenu, Pos.BOTTOM_CENTER);
         BorderPane.setAlignment(currentPlayer, Pos.CENTER);
         BorderPane.setAlignment(chessBoardPane, Pos.CENTER);
         
@@ -61,7 +66,7 @@ public class ChessGUI extends Application
         chessBoardPane.setAlignment(Pos.CENTER);
         chessBoardPane.setVgap(0);
         chessBoardPane.setHgap(0);
-        chessBoardPane.setPadding(new Insets(25, 25, 25, 25));
+        chessBoardPane.setPadding(new Insets(10, 10, 10, 10));
         
         Image blackSquare = null;
         Image whiteSquare = null;
@@ -119,5 +124,12 @@ public class ChessGUI extends Application
         newSquare.setFitWidth(100);
         
         return newSquare;
+    }
+    
+    private Node createSpacer() 
+    {
+    	final Region spacer =  new Region();
+    	HBox.setHgrow(spacer, Priority.ALWAYS);
+    	return spacer;
     }
 }
