@@ -8,7 +8,7 @@ public class ChessBoard
 {
 	//the chess board is a 2D array of chess piece objects
 	//a chess board is an 8x8 board
-	private static final int SIZE_OF_BOARD=8
+	private static final int SIZE_OF_BOARD=8;
 	private ChessPiece [][] chessBoard=new ChessPiece[SIZE_OF_BOARD][SIZE_OF_BOARD];
 	
 	//for checking whether a king is in check or check mate, we need a list of each player's pieces
